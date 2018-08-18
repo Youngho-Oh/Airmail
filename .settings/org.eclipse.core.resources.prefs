@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//hal/clock.c=UTF-8
+encoding//hal/hal_mcu.c=UTF-8
+encoding//hal/hal_mcu.h=UTF-8
+encoding//hal/int/hal_int.c=UTF-8
+encoding//hal/int/hal_int.h=UTF-8
+encoding//hal/util.c=UTF-8
+encoding//hal/util.h=UTF-8
+encoding/<project>=UTF-8
