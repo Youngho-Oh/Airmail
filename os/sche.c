@@ -26,6 +26,8 @@ unsigned int running_executed_task = 0;
 T_ERROR wow_sche_task_init( )
 {
 	int_task_evt = 0;
+	int_task_sleep = 0;
+	running_executed_task = 0;
 
 	memset( (void*)task_list, 0, (sizeof(sche_task)*NUM_OF_TASK) );
 
@@ -43,7 +45,7 @@ T_ERROR wow_sche_task_add(sche_task * add_task_info, unsigned char priority, cha
 
 	if(task_list[priority].func_event == NULL)
 		memcpy((void *)&task_list[priority], (void *)add_task_info, sizeof(sche_task));
-	else if(is_forced == true)	// task_list[priority].func_event != NULL && is_forced == true
+	else if( (is_forced == true) && (running_executed_task != priority) )	// task_list[priority].func_event != NULL && is_forced == true
 		memcpy((void *)&task_list[priority], (void *)add_task_info, sizeof(sche_task));
 	else	// task_list[priority].func_event != NULL && is_forced == false
 		return OS_PARAM_ERROR;
@@ -64,12 +66,12 @@ void wow_sche_task_run( )
 			task_list[ptr_task_evt_state].func_event();
 		}
 
-		if( ptr_task_evt_state++ == NUM_OF_TASK )
+		if( ++ptr_task_evt_state == NUM_OF_TASK )
 			ptr_task_evt_state = 0;
 	}
 }
 
-T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned int event)
+T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned char event)
 {
 	if( (task >= NUM_OF_MAXIMUM_TASK) || (task >= NUM_OF_TASK) )
 		return OS_PARAM_ERROR;
@@ -77,19 +79,19 @@ T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned int event)
 		return OS_PARAM_ERROR;
 
 	int_task_evt |= (0x01 << running_executed_task);
-	task_list[task].bit_event |= event;
+	task_list[task].bit_event |= (0x01 << event);
 
 	return OS_OK;
 }
 
-T_ERROR wow_sche_task_evt_disable(unsigned int task, unsigned int event)
+T_ERROR wow_sche_task_evt_disable(unsigned int task, unsigned char event)
 {
 	if( (task >= NUM_OF_MAXIMUM_TASK) || (task >= NUM_OF_TASK) )
 		return OS_PARAM_ERROR;
 	if( task_list[task].func_event == NULL )
 		return OS_PARAM_ERROR;
 
-	task_list[task].bit_event &= ~event;
+	task_list[task].bit_event &= ~(0x01 << event);
 	if(task_list[task].bit_event == 0)
 		int_task_evt &= ~(0x01 << running_executed_task);
 
@@ -120,6 +122,7 @@ void wow_sche_task_wakeup_check(void)
 			if(task_list[check_task_wakeup].time_wakeup == cur_clock_ms){
 				int_task_sleep &= ~(0x01 << check_task_wakeup);
 				int_task_evt |= (0x01 << running_executed_task);
+				task_list[check_task_wakeup].time_wakeup = 0;
 			}
 		}
 		check_task_wakeup++;

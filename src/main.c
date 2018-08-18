@@ -40,15 +40,18 @@ int main()
 	/* Set up wow os */
 	{
 		// Set up kernel clock
-		wow_clock_init( );
+		wow_clock_init();
 		// Set up task
-		wow_sche_task_init( );
+		wow_sche_task_init();
 		// start kernel clock
-		wow_clock_start( );
+		wow_clock_start();
 	}
 
-	/* Start User programs */
+	/* Start User main function */
 	sys_usrmain();
+
+	// Start kernel tasks
+	wow_sche_task_run();
 
 	return 0;
 }
