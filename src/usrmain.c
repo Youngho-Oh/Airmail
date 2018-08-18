@@ -10,11 +10,10 @@
 #include "hal/hal_mcu.h"
 #include "sys/log.h"
 
-unsigned char XXX;
-char msg_sample[13] = {'H','e','l','l','o',' ','w','o','r','l','d','\r','\n'};
-char done_sample[13] = {'F','u','c','k','i','n','g','!','!','!','!','\r','\n'};
+#include "os/wow_os.h"
 
-extern unsigned char test;
+#include "task/task_common.h"
+#include "task/task_rf.h"
 
 void sys_usrmain( )
 {
@@ -22,17 +21,9 @@ void sys_usrmain( )
 	 * This function is main for general user
 	 */
 
-	XXX = 0x50;
-
-	//TODO
-	while(1){
-		//WOW XXX UART testcode
-		if(test == 0)
-			log_message(msg_sample, 15);
-		else
-			log_message(done_sample, 15);
-		halMcuWaitMs(1000);
-	}
+	log_message("Start User Function!!!\r\n", 24);
 
 	//TODO : create scheduler function
+	task_rf_init( );
+	wow_sche_task_evt_enable(PRIORITY_TASK_RF, EVENT_RF_INIT);
 }

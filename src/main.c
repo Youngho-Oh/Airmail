@@ -7,7 +7,6 @@
 
 #include "hal/common.h"
 #include "hal/hal_mcu.h"
-#include "rf/basic_rf.h"
 #include "sys/log.h"
 #include "os/wow_os.h"
 
@@ -17,9 +16,6 @@
 #include "hal/timer3.h"
 
 extern void sys_usrmain(void);
-
-//XXX Temp variable for RF test
-basicRfCfg_t rfValue;
 
 int main()
 {
@@ -31,24 +27,22 @@ int main()
 		uart0_init();
 		sys_setting.enable_log = 1;
 	}
-	/* Set up RF for IEEE 802.15.4 */
-	{
-		basicRfInit(&rfValue);
-		sys_setting.enable_rf = 1;
-	}
 
 	/* Set up wow os */
 	{
 		// Set up kernel clock
-		wow_clock_init( );
+		wow_clock_init();
 		// Set up task
-		wow_sche_task_init( );
+		wow_sche_task_init();
 		// start kernel clock
-		wow_clock_start( );
+		wow_clock_start();
 	}
 
-	/* Start User programs */
+	/* Start User main function */
 	sys_usrmain();
+
+	// Start kernel tasks
+	wow_sche_task_run();
 
 	return 0;
 }
