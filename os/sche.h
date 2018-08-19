@@ -47,6 +47,9 @@ void wow_sche_task_run(void);
 T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned char event);
 T_ERROR wow_sche_task_evt_disable(unsigned int task, unsigned char event);
 
+//T_ERROR wow_sche_task_evt_timer_enable(unsigned int task, unsigned char event, unsigned int term);
+//T_ERROR wow_sche_task_evt_timer_disable(unsigned int task, unsigned char event);
+
 T_ERROR wow_sche_task_sleep(unsigned int sleep_ms);
 
 void wow_sche_task_wakeup_check(void);

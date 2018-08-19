@@ -17,7 +17,8 @@ void task_rf_init(void);
 //unsigned char task_rf_event_function(unsigned char cur_task_event);
 
 // Defined RF task event
-#define EVENT_RF_INIT	0
+#define EVENT_RF_INIT		0
+#define EVENT_RF_LAW_SEND	1
 
 extern sche_task task_rf;
 
