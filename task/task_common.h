@@ -8,6 +8,7 @@
 #ifndef TASK_TASK_COMMON_H_
 #define TASK_TASK_COMMON_H_
 
-#define PRIORITY_TASK_RF	0
+#define PRIORITY_TASK_HAL	0
+#define PRIORITY_TASK_RF	1
 
 #endif /* TASK_TASK_COMMON_H_ */

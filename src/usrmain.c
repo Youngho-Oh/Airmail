@@ -14,6 +14,7 @@
 
 #include "task/task_common.h"
 #include "task/task_rf.h"
+#include "task/task_hal.h"
 
 void sys_usrmain( )
 {
@@ -23,7 +24,19 @@ void sys_usrmain( )
 
 	log_message("Start User Function!!!\r\n", 24);
 
-	//TODO : create scheduler function
-	task_rf_init( );
-	wow_sche_task_evt_enable(PRIORITY_TASK_RF, EVENT_RF_INIT);
+	// Initialize HAL task
+	{
+		task_hal_init( );
+		wow_sche_task_evt_enable(PRIORITY_TASK_HAL, EVENT_HAL_INIT);
+	}
+
+	// Initialize RF task
+	{
+		task_rf_init( );
+		wow_sche_task_evt_enable(PRIORITY_TASK_RF, EVENT_RF_INIT);
+	}
+
+	{
+		//TODO : create scheduler function
+	}
 }
