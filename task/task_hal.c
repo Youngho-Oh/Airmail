@@ -48,8 +48,5 @@ T_ERROR _task_hal_event_init(void)
 {
 	log_message("Init HAL task init!!!\r\n", 23);
 
-	//TODO
-	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_HAL_INIT, 1000);
-
 	return OS_OK;
 }

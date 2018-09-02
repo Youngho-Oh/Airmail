@@ -65,6 +65,7 @@ T_ERROR _task_rf_event_init(void)
 			log_message("Success to init RF\r\n",20);
 			sys_setting.enable_rf = 1;
 			//TODO
+			wow_sche_task_evt_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND);
 		}
 		else
 		{
@@ -79,6 +80,8 @@ T_ERROR _task_rf_event_init(void)
 static T_ERROR _task_rf_event_law_send(void)
 {
 	//TODO
+	log_message("RF law data send\r\n",18);
+	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 1000);
 
 	return OS_OK;
 }
