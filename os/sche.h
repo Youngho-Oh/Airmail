@@ -28,6 +28,8 @@ typedef struct {
 * MACROS
 */
 
+#define	SCHE_UNDEFINED		0xFF
+
 /***********************************************************************************
  * VALUES
  */
@@ -44,11 +46,13 @@ T_ERROR wow_sche_task_init(void);
 T_ERROR wow_sche_task_add(sche_task * add_task_info, unsigned char priority, char is_forced);
 void wow_sche_task_run(void);
 
+unsigned int wow_sche_task_now_running(void);
+
 T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned char event);
 T_ERROR wow_sche_task_evt_disable(unsigned int task, unsigned char event);
 
-//T_ERROR wow_sche_task_evt_timer_enable(unsigned int task, unsigned char event, unsigned int term);
-//T_ERROR wow_sche_task_evt_timer_disable(unsigned int task, unsigned char event);
+T_ERROR wow_sche_task_evt_timer_enable(unsigned int task, unsigned char event, unsigned int term);
+T_ERROR wow_sche_task_evt_timer_disable(unsigned int task, unsigned char event);
 
 T_ERROR wow_sche_task_sleep(unsigned int sleep_ms);
 
