@@ -18,6 +18,9 @@ sche_task task_rf = {0, 0, NULL};
 // Variable for RF test
 basicRfCfg_t rfValue;
 
+unsigned short des_addr = 0;
+unsigned char data_buf[255] = {0,};
+
 static T_ERROR task_rf_event_function(unsigned char cur_task_event);
 static T_ERROR _task_rf_event_init(void);
 static T_ERROR _task_rf_event_law_send(void);
@@ -79,8 +82,11 @@ T_ERROR _task_rf_event_init(void)
 
 static T_ERROR _task_rf_event_law_send(void)
 {
-	//TODO
 	log_message("RF law data send\r\n",18);
+
+	//TODO : send test
+	basicRfSendPacket(des_addr, data_buf, 8);
+
 	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 1000);
 
 	return OS_OK;
