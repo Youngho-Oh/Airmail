@@ -25,7 +25,8 @@ T_ERROR wow_sche_task_init( )
 {
 	int_task_evt = 0;
 	int_task_sleep = 0;
-	running_executed_task = 0;
+
+	running_executed_task = SCHE_UNDEFINED;
 
 	return OS_OK;
 }
@@ -70,6 +71,11 @@ void wow_sche_task_run( )
 	}
 }
 
+unsigned int wow_sche_task_now_running(void)
+{
+	return running_executed_task;
+}
+
 T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned char event)
 {
 	if( (task >= NUM_OF_MAXIMUM_TASK) || (task >= NUM_OF_TASK) )
@@ -77,7 +83,7 @@ T_ERROR wow_sche_task_evt_enable(unsigned int task, unsigned char event)
 	if( (task_list[task] == NULL) || (task_list[task]->func_event == NULL) )
 		return OS_PARAM_ERROR;
 
-	int_task_evt |= (0x01 << running_executed_task);
+	int_task_evt |= (0x01 << task);
 	task_list[task]->bit_event |= (0x01 << event);
 
 	return OS_OK;
@@ -92,7 +98,42 @@ T_ERROR wow_sche_task_evt_disable(unsigned int task, unsigned char event)
 
 	task_list[task]->bit_event &= ~(0x01 << event);
 	if(task_list[task]->bit_event == 0)
-		int_task_evt &= ~(0x01 << running_executed_task);
+
+		int_task_evt &= ~(0x01 << task);
+
+	return OS_OK;
+}
+
+T_ERROR wow_sche_task_evt_timer_enable(unsigned int task, unsigned char event, unsigned int term)
+{
+	unsigned int cur_clock_ms = 0;
+
+	if( (task >= NUM_OF_MAXIMUM_TASK) || (task >= NUM_OF_TASK) )
+		return OS_PARAM_ERROR;
+	if( (task_list[task] == NULL) || (task_list[task]->func_event == NULL) )
+		return OS_PARAM_ERROR;
+
+	cur_clock_ms = wow_clock_get_cur_time( );
+
+	task_list[task]->bit_event |= (0x01 << event);
+	task_list[task]->time_wakeup = (unsigned int)(cur_clock_ms+term);
+	// enable sleep bit of current task
+	int_task_sleep |= (0x01 << task);
+
+	return OS_OK;
+}
+
+T_ERROR wow_sche_task_evt_timer_disable(unsigned int task, unsigned char event)
+{
+	if( (task >= NUM_OF_MAXIMUM_TASK) || (task >= NUM_OF_TASK) )
+		return OS_PARAM_ERROR;
+	if( (task_list[task] == NULL) || (task_list[task]->func_event == NULL) )
+		return OS_PARAM_ERROR;
+
+	// disable sleep bit of current task
+	int_task_sleep &= ~(0x01 << task);
+	task_list[task]->bit_event &= ~(0x01 << event);
+	task_list[task]->time_wakeup = 0;
 
 	return OS_OK;
 }
@@ -119,7 +160,7 @@ T_ERROR wow_sche_task_sleep(unsigned int sleep_ms)
 {
 	unsigned int cur_clock_ms = wow_clock_get_cur_time( );
 
-	task_list[running_executed_task]->time_wakeup = cur_clock_ms+sleep_ms;
+	task_list[running_executed_task]->time_wakeup = (unsigned int)(cur_clock_ms+sleep_ms);
 
 	// enable sleep bit of current task
 	int_task_sleep |= (0x01 << running_executed_task);
@@ -134,14 +175,16 @@ void wow_sche_task_wakeup_check(void)
 	char check_task_wakeup = 0;
 	unsigned int cur_clock_ms = wow_clock_get_cur_time( );
 
-	while(check_task_wakeup < NUM_OF_TASK){
-		if((int_task_sleep >> check_task_wakeup) & 0x01){
-			if(task_list[check_task_wakeup]->time_wakeup == cur_clock_ms){
-				int_task_sleep &= ~(0x01 << check_task_wakeup);
-				int_task_evt |= (0x01 << running_executed_task);
-				task_list[check_task_wakeup]->time_wakeup = 0;
+	if(int_task_sleep != 0){
+		while(check_task_wakeup < NUM_OF_TASK){
+			if((int_task_sleep >> check_task_wakeup) & 0x01){
+				if(task_list[check_task_wakeup]->time_wakeup == cur_clock_ms){
+					int_task_sleep &= ~(0x01 << check_task_wakeup);
+					int_task_evt |= (0x01 << check_task_wakeup);
+					task_list[check_task_wakeup]->time_wakeup = 0;
+				}
 			}
+			check_task_wakeup++;
 		}
-		check_task_wakeup++;
 	}
 }
