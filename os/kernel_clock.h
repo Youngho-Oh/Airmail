@@ -27,7 +27,7 @@
  */
 
 // define kernel time value.
-extern unsigned int int_time_ms;
+extern unsigned long int_time_ms;
 
 /***********************************************************************************
  * FUNCTIONS
@@ -36,7 +36,7 @@ T_ERROR wow_clock_init(void);
 T_ERROR wow_clock_start(void);
 T_ERROR wow_clock_stop(void);
 
-unsigned int wow_clock_get_cur_time(void);
+unsigned long wow_clock_get_cur_time(void);
 
 void wow_clock_tick_increment(void);
 

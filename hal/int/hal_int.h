@@ -17,7 +17,7 @@ extern "C" {
  * INCLUDES
  */
 #include "hal/common.h"
-#include "hal/clock.h"
+#include "hal/hal_clock.h"
 
 /******************************************************************************
  * MACROS

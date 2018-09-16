@@ -4,7 +4,7 @@ SUB_DIRS =
 
 
 TARGET =
-TARGET_SRCS = clock.c log.c stimer.c sys_clock.c
-#USER_DEFINE = --codeseg BANK1
+TARGET_SRCS = rimeaddr.c
+USER_DEFINE = --codeseg BANK1
 
 include $(PROJ_ROOT)/includePost.mk

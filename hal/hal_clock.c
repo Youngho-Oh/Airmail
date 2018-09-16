@@ -10,7 +10,7 @@
  * INCLUDES
  */
 
-#include "hal/clock.h"
+#include "hal/hal_clock.h"
 
 /*******************************************************************************
  * PUBLIC FUNCTIONS

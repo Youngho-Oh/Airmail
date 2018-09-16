@@ -6,8 +6,8 @@
 ***********************************************************************************/
 
 #include <cc2530.h>
+#include "hal/hal_clock.h"
 #include "hal/hal_mcu.h"
-#include "hal/clock.h"
 #include "hal/hal_pin.h"
 
 //#include "hal_assert.h"

@@ -13,10 +13,10 @@
 #include "hal_rf.h"
 #include "hal_rf_security.h"
 
+#include "hal/hal_clock.h"
 #include "hal/common.h"
 #include "hal/util.h"
 
-#include "hal/clock.h"
 
 /***********************************************************************************
 * CONSTANTS AND DEFINES

@@ -5,11 +5,11 @@
  *      Author: eclipse
  */
 
+#include "hal/hal_clock.h"
+
 #include "os/wow_os.h"
 
 #include "hal/common.h"
-#include "hal/clock.h"
-
 #include "sys/log.h"
 
 #define TIMIF_T3OVFIF			0x01

@@ -14,7 +14,7 @@ extern T_ERROR _wow_clock_init(void);
 extern T_ERROR _wow_clock_start(void);
 extern T_ERROR _wow_clock_stop(void);
 
-unsigned int int_time_ms = 0;
+unsigned long int_time_ms = 0;
 
 T_ERROR wow_clock_init(void)
 {
@@ -33,7 +33,7 @@ T_ERROR wow_clock_stop(void)
 	return _wow_clock_stop();
 }
 
-unsigned int wow_clock_get_cur_time(void)
+unsigned long wow_clock_get_cur_time(void)
 {
 	return int_time_ms;
 }
