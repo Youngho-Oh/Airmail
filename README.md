@@ -14,12 +14,12 @@
 
 ## Getting stared
 
- - Development enviornment : WSL (case of using windows10)
+ - Development enviornment : WSL (case of using windows10)  
     → [INSTALL GUIDE](http://wsl-guide.org/en/latest/installation.html)
- - Compiler : SDCC (case of using CC2530)
+ - Compiler : SDCC (case of using CC2530)  
     → [DOWNLOAD LINK](https://sourceforge.net/projects/sdcc/files/)  
 
- <Setting of SDCC compiler> (Optional)
+  *Setting of SDCC compiler* (Optional)
    1) Go to SDCC's download link page
    
    2) Download SDCC compiler source file  
