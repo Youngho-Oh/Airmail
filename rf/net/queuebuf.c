@@ -44,6 +44,10 @@
 
 //#include "contiki-net.h"
 #include "rf/rf_config.h"
+#include "rf/net/queuebuf.h"
+
+#include "lib/memb.h"
+
 #if WITH_SWAP
 #include "cfs/cfs.h"
 #endif
@@ -378,7 +382,7 @@ queuebuf_new_from_packetbuf(void)
 #if QUEUEBUF_STATS
       ++queuebuf_len;
       PRINTF("queuebuf len %d\n", queuebuf_len);
-      printf("#A q=%d\n", queuebuf_len);
+      PRINTF("#A q=%d\n", queuebuf_len);
       if(queuebuf_len == queuebuf_max_len + 1) {
   memb_free(&bufmem, buf);
   queuebuf_len--;
@@ -421,7 +425,7 @@ queuebuf_free(struct queuebuf *buf)
     memb_free(&bufmem, buf);
 #if QUEUEBUF_STATS
     --queuebuf_len;
-    printf("#A q=%d\n", queuebuf_len);
+    PRINTF("#A q=%d\n", queuebuf_len);
 #endif /* QUEUEBUF_STATS */
 #if QUEUEBUF_DEBUG
     list_remove(queuebuf_list, buf);

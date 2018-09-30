@@ -62,10 +62,15 @@
  *
  */
 
-#include "net/tcpip.h"
-#include "net/resolv.h"
-#include "net/uip-udp-packet.h"
+#include "rf/net/tcpip.h"
+#include "rf/net/resolv.h"
+#include "rf/net/uip-udp-packet.h"
+#include "rf/net/uip.h"
+
 #include "lib/random.h"
+
+#include "sys/clock.h"
+#include "sys/etimer.h"
 
 #ifndef DEBUG
 #define DEBUG CONTIKI_TARGET_COOJA
@@ -293,7 +298,7 @@ static struct etimer retry;
 
 process_event_t resolv_event_found;
 
-PROCESS(resolv_process, "DNS resolver");
+//PROCESS(resolv_process, "DNS resolver");
 
 static void resolv_found(char *name, uip_ipaddr_t * ipaddr);
 
@@ -324,7 +329,7 @@ static const uip_ipaddr_t resolv_mdns_addr =
 #endif /* UIP_CONF_IPV6 */
 static int mdns_needs_host_announce;
 
-PROCESS(mdns_probe_process, "mDNS probe");
+//PROCESS(mdns_probe_process, "mDNS probe");
 #endif /* RESOLV_CONF_SUPPORTS_MDNS */
 
 /*---------------------------------------------------------------------------*/
@@ -497,8 +502,8 @@ mdns_announce_requested(void)
 static void
 start_name_collision_check(clock_time_t after)
 {
-  process_exit(&mdns_probe_process);
-  process_start(&mdns_probe_process, (void *)&after);
+//  process_exit(&mdns_probe_process);
+//  process_start(&mdns_probe_process, (void *)&after);
 }
 /*---------------------------------------------------------------------------*/
 /** \internal
@@ -1082,122 +1087,122 @@ resolv_get_hostname(void)
 /** \internal
  * Process for probing for name conflicts.
  */
-PROCESS_THREAD(mdns_probe_process, ev, data)
-{
-  static struct etimer delay;
-
-  PROCESS_BEGIN();
-  mdns_state = MDNS_STATE_WAIT_BEFORE_PROBE;
-
-  PRINTF("mdns-probe: Process (re)started.\n");
-
-  /* Wait extra time if specified in data */
-  if(NULL != data) {
-    PRINTF("mdns-probe: Probing will begin in %ld clocks.\n",
-           (long)*(clock_time_t *) data);
-    etimer_set(&delay, *(clock_time_t *) data);
-    PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
-  }
-
-  /* We need to wait a random (0-250ms) period of time before
-   * probing to be in compliance with the MDNS spec. */
-  etimer_set(&delay, CLOCK_SECOND * (random_rand() & 0xFF) / 1024);
-  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
-
-  /* Begin searching for our name. */
-  mdns_state = MDNS_STATE_PROBING;
-  resolv_query(resolv_hostname);
-
-  do {
-    PROCESS_WAIT_EVENT_UNTIL(ev == resolv_event_found);
-  } while(strcasecmp(resolv_hostname, data) != 0);
-
-  mdns_state = MDNS_STATE_READY;
-  mdns_announce_requested();
-
-  PRINTF("mdns-probe: Finished probing.\n");
-
-  PROCESS_END();
-}
+//PROCESS_THREAD(mdns_probe_process, ev, data)
+//{
+//  static struct etimer delay;
+//
+//  PROCESS_BEGIN();
+//  mdns_state = MDNS_STATE_WAIT_BEFORE_PROBE;
+//
+//  PRINTF("mdns-probe: Process (re)started.\n");
+//
+//  /* Wait extra time if specified in data */
+//  if(NULL != data) {
+//    PRINTF("mdns-probe: Probing will begin in %ld clocks.\n",
+//           (long)*(clock_time_t *) data);
+//    etimer_set(&delay, *(clock_time_t *) data);
+//    PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
+//  }
+//
+//  /* We need to wait a random (0-250ms) period of time before
+//   * probing to be in compliance with the MDNS spec. */
+//  etimer_set(&delay, CLOCK_SECOND * (random_rand() & 0xFF) / 1024);
+//  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
+//
+//  /* Begin searching for our name. */
+//  mdns_state = MDNS_STATE_PROBING;
+//  resolv_query(resolv_hostname);
+//
+//  do {
+//    PROCESS_WAIT_EVENT_UNTIL(ev == resolv_event_found);
+//  } while(strcasecmp(resolv_hostname, data) != 0);
+//
+//  mdns_state = MDNS_STATE_READY;
+//  mdns_announce_requested();
+//
+//  PRINTF("mdns-probe: Finished probing.\n");
+//
+//  PROCESS_END();
+//}
 #endif /* RESOLV_CONF_SUPPORTS_MDNS */
 /*---------------------------------------------------------------------------*/
 /** \internal
  * The main UDP function.
  */
-PROCESS_THREAD(resolv_process, ev, data)
-{
-  PROCESS_BEGIN();
-
-  memset(names, 0, sizeof(names));
-
-  resolv_event_found = process_alloc_event();
-
-  PRINTF("resolver: Process started.\n");
-
-  resolv_conn = udp_new(NULL, 0, NULL);
-
-#if RESOLV_CONF_SUPPORTS_MDNS
-  PRINTF("resolver: Supports MDNS.\n");
-  uip_udp_bind(resolv_conn, UIP_HTONS(MDNS_PORT));
-
-#if UIP_CONF_IPV6
-  uip_ds6_maddr_add(&resolv_mdns_addr);
-#else
-  /* TODO: Is there anything we need to do here for IPv4 multicast? */
-#endif
-
-  resolv_set_hostname(CONTIKI_CONF_DEFAULT_HOSTNAME);
-#endif /* RESOLV_CONF_SUPPORTS_MDNS */
-
-  while(1) {
-    PROCESS_WAIT_EVENT();
-
-    if(ev == PROCESS_EVENT_TIMER) {
-      tcpip_poll_udp(resolv_conn);
-    } else if(ev == tcpip_event) {
-      if(uip_udp_conn == resolv_conn) {
-        if(uip_newdata()) {
-          newdata();
-        }
-        if(uip_poll()) {
-#if RESOLV_CONF_SUPPORTS_MDNS
-          if(mdns_needs_host_announce) {
-            size_t len;
-
-            PRINTF("resolver: Announcing that we are \"%s\".\n",
-                   resolv_hostname);
-
-            memset(uip_appdata, 0, sizeof(struct dns_hdr));
-
-            len = mdns_prep_host_announce_packet();
-
-            uip_udp_packet_sendto(resolv_conn, uip_appdata,
-                                  len, &resolv_mdns_addr, UIP_HTONS(MDNS_PORT));
-
-            mdns_needs_host_announce = 0;
-
-            /* Poll again in case this fired
-             * at the same time the event timer did.
-             */
-            tcpip_poll_udp(resolv_conn);
-          } else
-#endif /* RESOLV_CONF_SUPPORTS_MDNS */
-          {
-            check_entries();
-          }
-        }
-      }
-    }
-
-#if RESOLV_CONF_SUPPORTS_MDNS
-    if(mdns_needs_host_announce) {
-      tcpip_poll_udp(resolv_conn);
-    }
-#endif /* RESOLV_CONF_SUPPORTS_MDNS */
-  }
-
-  PROCESS_END();
-}
+//PROCESS_THREAD(resolv_process, ev, data)
+//{
+//  PROCESS_BEGIN();
+//
+//  memset(names, 0, sizeof(names));
+//
+//  resolv_event_found = process_alloc_event();
+//
+//  PRINTF("resolver: Process started.\n");
+//
+//  resolv_conn = udp_new(NULL, 0, NULL);
+//
+//#if RESOLV_CONF_SUPPORTS_MDNS
+//  PRINTF("resolver: Supports MDNS.\n");
+//  uip_udp_bind(resolv_conn, UIP_HTONS(MDNS_PORT));
+//
+//#if UIP_CONF_IPV6
+//  uip_ds6_maddr_add(&resolv_mdns_addr);
+//#else
+//  /* TODO: Is there anything we need to do here for IPv4 multicast? */
+//#endif
+//
+//  resolv_set_hostname(CONTIKI_CONF_DEFAULT_HOSTNAME);
+//#endif /* RESOLV_CONF_SUPPORTS_MDNS */
+//
+//  while(1) {
+//    PROCESS_WAIT_EVENT();
+//
+//    if(ev == PROCESS_EVENT_TIMER) {
+//      tcpip_poll_udp(resolv_conn);
+//    } else if(ev == tcpip_event) {
+//      if(uip_udp_conn == resolv_conn) {
+//        if(uip_newdata()) {
+//          newdata();
+//        }
+//        if(uip_poll()) {
+//#if RESOLV_CONF_SUPPORTS_MDNS
+//          if(mdns_needs_host_announce) {
+//            size_t len;
+//
+//            PRINTF("resolver: Announcing that we are \"%s\".\n",
+//                   resolv_hostname);
+//
+//            memset(uip_appdata, 0, sizeof(struct dns_hdr));
+//
+//            len = mdns_prep_host_announce_packet();
+//
+//            uip_udp_packet_sendto(resolv_conn, uip_appdata,
+//                                  len, &resolv_mdns_addr, UIP_HTONS(MDNS_PORT));
+//
+//            mdns_needs_host_announce = 0;
+//
+//            /* Poll again in case this fired
+//             * at the same time the event timer did.
+//             */
+//            tcpip_poll_udp(resolv_conn);
+//          } else
+//#endif /* RESOLV_CONF_SUPPORTS_MDNS */
+//          {
+//            check_entries();
+//          }
+//        }
+//      }
+//    }
+//
+//#if RESOLV_CONF_SUPPORTS_MDNS
+//    if(mdns_needs_host_announce) {
+//      tcpip_poll_udp(resolv_conn);
+//    }
+//#endif /* RESOLV_CONF_SUPPORTS_MDNS */
+//  }
+//
+//  PROCESS_END();
+//}
 /*---------------------------------------------------------------------------*/
 #if RESOLV_AUTO_REMOVE_TRAILING_DOTS
 static const char *
@@ -1288,7 +1293,7 @@ resolv_query(const char *name)
 #endif /* RESOLV_CONF_SUPPORTS_MDNS */
 
   /* Force check_entires() to run on our process. */
-  process_post(&resolv_process, PROCESS_EVENT_TIMER, 0);
+//  process_post(&resolv_process, PROCESS_EVENT_TIMER, 0);
 }
 /*---------------------------------------------------------------------------*/
 /**
@@ -1491,7 +1496,8 @@ resolv_found(char *name, uip_ipaddr_t * ipaddr)
   }
 #endif /* VERBOSE_DEBUG */
 
-  process_post(PROCESS_BROADCAST, resolv_event_found, name);
+//  process_post(PROCESS_BROADCAST, resolv_event_found, name);
+  ;
 }
 /*---------------------------------------------------------------------------*/
 #endif /* UIP_UDP */

@@ -1,22 +1,5 @@
-/**
- * \addtogroup rime
- * @{
- */
-
-/**
- * \defgroup trickle Reliable single-source multi-hop flooding
- * @{
- *
- * The trickle module sends a single packet to all nodes on the network.
- *
- * \section channels Channels
- *
- * The trickle module uses 1 channel.
- *
- */
-
 /*
- * Copyright (c) 2007, Swedish Institute of Computer Science.
+ * Copyright (c) 2008, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,49 +32,61 @@
 
 /**
  * \file
- *         Header file for Trickle (reliable single source flooding) for Rime
+ *         A brief description of what this file is.
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
 
-#ifndef __TRICKLE_H__
-#define __TRICKLE_H__
+#ifndef __TIMETABLE_AGGREGATE_H__
+#define __TIMETABLE_AGGREGATE_H__
 
-#include "sys/ctimer.h"
-
-#include "rf/net/rime/broadcast.h"
-#include "rf/net/queuebuf.h"
-
-#include "sys/pt.h"
+#include "sys/timetable.h"
 #include "sys/cc.h"
 
-#define TRICKLE_ATTRIBUTES  { PACKETBUF_ATTR_EPACKET_ID, PACKETBUF_ATTR_BIT * 8 },\
-                            BROADCAST_ATTRIBUTES
-
-struct trickle_conn;
-
-struct trickle_callbacks {
-  void (* recv)(struct trickle_conn *c);
+struct timetable_aggregate_entry {
+  const char *id;
+  unsigned short episodes;
+  unsigned long time;
 };
 
-struct trickle_conn {
-  struct broadcast_conn c;
-  const struct trickle_callbacks *cb;
-  struct ctimer t, interval_timer, first_transmission_timer;
-  struct pt pt;
-  struct queuebuf *q;
-  clock_time_t interval;
-  uint8_t seqno;
-  uint8_t interval_scaling;
-  uint8_t duplicates;
+struct timetable_aggregate {
+  struct timetable_aggregate_entry *entries;
+  int ptr;
+  const int size;
 };
 
-void trickle_open(struct trickle_conn *c, clock_time_t interval,
-		  uint16_t channel, const struct trickle_callbacks *cb);
-void trickle_close(struct trickle_conn *c);
 
-void trickle_send(struct trickle_conn *c);
+#define TIMETABLE_AGGREGATE_DECLARE(name)				\
+struct timetable_aggregate name
 
-#endif /* __TRICKLE_H__ */
-/** @} */
-/** @} */
+
+#define TIMETABLE_AGGREGATE(name, size)				\
+static struct timetable_aggregate_entry CC_CONCAT(name,_entries)[size];	\
+static struct timetable_aggregate name = {				\
+  CC_CONCAT(name,_entries),						\
+  0,									\
+  size									\
+}
+
+#define TIMETABLE_AGGREGATE_NONSTATIC(name, size)		      	\
+static struct timetable_aggregate_entry CC_CONCAT(name,_entries)[size];	\
+struct timetable_aggregate name = {				\
+  CC_CONCAT(name,_entries),						\
+  0,									\
+  size									\
+}
+
+void timetable_aggregate_print_detailed(struct timetable_aggregate *a);
+
+void timetable_aggregate_print_categories(struct timetable_aggregate *a);
+
+void timetable_aggregate_reset(struct timetable_aggregate *a);
+
+void timetable_aggregate_compute_detailed(struct timetable_aggregate *a,
+					  struct timetable *timetable);
+void timetable_aggregate_compute_categories(struct timetable_aggregate *a,
+					     struct timetable *timetable);
+
+
+
+#endif /* __TIMETABLE_AGGREGATE_H__ */

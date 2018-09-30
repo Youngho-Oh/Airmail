@@ -32,6 +32,13 @@
 
 #define CCIF
 
+#ifndef NULL
+#define NULL	0
+#endif
+
+//XXX
+#define PT_THREAD
+
 typedef	unsigned char	uint8_t;
 typedef char			int8_t;
 typedef unsigned short	uint16_t;

@@ -55,6 +55,9 @@
 #include "rf/net/rime/collect-link-estimate.h"
 #include "lib/list.h"
 
+#include "sys/ctimer.h"
+#include "sys/timer.h"
+
 struct collect_neighbor_list {
   LIST_STRUCT(list);
   struct ctimer periodic;

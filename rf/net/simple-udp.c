@@ -41,8 +41,8 @@
  *
  */
 
-#include "contiki-net.h"
-#include "net/simple-udp.h"
+//#include "contiki-net.h"
+#include "rf/net/simple-udp.h"
 
 #include <string.h>
 
@@ -58,7 +58,7 @@ static void
 init_simple_udp(void)
 {
   if(started == 0) {
-    process_start(&simple_udp_process, NULL);
+//    process_start(&simple_udp_process, NULL);
     started = 1;
   }
 }

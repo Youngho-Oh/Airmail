@@ -86,9 +86,14 @@
 #ifndef __PSOCK_H__
 #define __PSOCK_H__
 
-#include "contiki.h"
-#include "contiki-lib.h"
-#include "contiki-net.h"
+//#include "contiki.h"
+//#include "contiki-lib.h"
+//#include "contiki-net.h"
+#include "rf/rf_config.h"
+#include "rf/net/uip.h"
+
+#include "sys/pt.h"
+#include "sys/cc.h"
 
  /*
  * The structure that holds the state of a buffer.

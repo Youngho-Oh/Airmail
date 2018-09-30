@@ -39,8 +39,9 @@
 #ifndef __RESOLV_H__
 #define __RESOLV_H__
 
-#include "contiki.h"
-#include "uip.h"
+//#include "contiki.h"
+#include "rf/rf_config.h"
+#include "rf/net/uip.h"
 
 /** If RESOLV_CONF_SUPPORTS_MDNS is set, then queries
  *  for domain names in the `local` TLD will use MDNS and
@@ -104,6 +105,6 @@ CCIF void resolv_set_hostname(const char *hostname);
 CCIF const char *resolv_get_hostname(void);
 #endif
 
-PROCESS_NAME(resolv_process);
+//PROCESS_NAME(resolv_process);
 
 #endif /* __RESOLV_H__ */
