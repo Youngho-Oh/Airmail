@@ -40,7 +40,8 @@
 #ifndef NETSTACK_H
 #define NETSTACK_H
 
-#include "contiki-conf.h"
+//#include "contiki-conf.h"
+#include "rf/rf_config.h"
 
 #ifndef NETSTACK_NETWORK
 #ifdef NETSTACK_CONF_NETWORK
@@ -96,10 +97,10 @@
 #endif /* NETSTACK_CONF_FRAMER */
 #endif /* NETSTACK_FRAMER */
 
-#include "net/mac/mac.h"
-#include "net/mac/rdc.h"
-#include "net/mac/framer.h"
-#include "dev/radio.h"
+#include "rf/net/mac/mac.h"
+#include "rf/net/mac/rdc.h"
+#include "rf/net/mac/framer.h"
+#include "hal/radio.h"
 
 /**
  * The structure of a network driver in Contiki.

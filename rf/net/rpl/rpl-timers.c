@@ -39,8 +39,9 @@
  * \author Joakim Eriksson <joakime@sics.se>, Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include "contiki-conf.h"
-#include "net/rpl/rpl-private.h"
+//#include "contiki-conf.h"
+#include "rf/rf_config.h"
+#include "rf/net/rpl/rpl-private.h"
 #include "lib/random.h"
 #include "sys/ctimer.h"
 

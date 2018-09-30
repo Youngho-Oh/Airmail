@@ -70,13 +70,10 @@
 
 //#include "contiki-conf.h"
 #include "os/wow_os.h"
+//#include "rf/rf_config.h"
 
 #ifndef clock_time_t
 #define clock_time_t unsigned long
-#endif
-
-#ifndef	uint16_t
-#include "rf/rf_config.h"
 #endif
 
 /**
@@ -138,7 +135,7 @@ void clock_wait(clock_time_t t);
  *
  * \note Interrupts could increase the delay by a variable amount.
  */
-void clock_delay_usec(uint16_t dt);
+void clock_delay_usec(unsigned short dt);
 
 /**
  * Deprecated platform-specific routines.

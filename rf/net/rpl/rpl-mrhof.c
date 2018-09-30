@@ -44,11 +44,11 @@
  * \author Joakim Eriksson <joakime@sics.se>, Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include "net/rpl/rpl-private.h"
-#include "net/nbr-table.h"
+#include "rf/net/rpl/rpl-private.h"
+#include "rf/net/nbr-table.h"
 
 #define DEBUG DEBUG_NONE
-#include "net/uip-debug.h"
+#include "rf/net/uip-debug.h"
 
 static void reset(rpl_dag_t *);
 static void neighbor_link_callback(rpl_parent_t *, int, int);

@@ -59,12 +59,12 @@
  * Representation of an IP address.
  *
  */
-typedef union uip_ip4addr_t {
+typedef union uip_ip4addr {
   uint8_t  u8[4];			/* Initializer, must come first. */
   uint16_t u16[2];
 } uip_ip4addr_t;
 
-typedef union uip_ip6addr_t {
+typedef union uip_ip6addr {
   uint8_t  u8[16];			/* Initializer, must come first. */
   uint16_t u16[8];
 } uip_ip6addr_t;

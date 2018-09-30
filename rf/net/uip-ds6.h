@@ -44,6 +44,7 @@
 
 #include "rf/net/uip.h"
 #include "sys/stimer.h"
+#include "sys/timer.h"
 /* The size of uip_ds6_addr_t depends on UIP_ND6_DEF_MAXDADNS. Include uip-nd6.h to define it. */
 #include "rf/net/uip-nd6.h"
 #include "rf/net/uip-ds6-route.h"

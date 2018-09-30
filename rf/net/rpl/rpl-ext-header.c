@@ -42,13 +42,13 @@
  *         Nicolas Tsiftes <nvt@sics.se>.
  */
 
-#include "net/uip.h"
-#include "net/tcpip.h"
-#include "net/uip-ds6.h"
-#include "net/rpl/rpl-private.h"
+#include "rf/net/uip.h"
+#include "rf/net/tcpip.h"
+#include "rf/net/uip-ds6.h"
+#include "rf/net/rpl/rpl-private.h"
 
 #define DEBUG DEBUG_NONE
-#include "net/uip-debug.h"
+#include "rf/net/uip-debug.h"
 
 #include <limits.h>
 #include <string.h>

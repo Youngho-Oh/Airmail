@@ -37,13 +37,13 @@
 #ifndef RPL_PRIVATE_H
 #define RPL_PRIVATE_H
 
-#include "net/rpl/rpl.h"
+#include "rf/net/rpl/rpl.h"
 
 #include "lib/list.h"
-#include "net/uip.h"
+#include "rf/net/uip.h"
 #include "sys/clock.h"
 #include "sys/ctimer.h"
-#include "net/uip-ds6.h"
+#include "rf/net/uip-ds6.h"
 
 /*---------------------------------------------------------------------------*/
 /** \brief Is IPv6 address addr the link-local, all-RPL-nodes

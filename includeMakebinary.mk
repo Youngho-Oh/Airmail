@@ -8,10 +8,11 @@ all: $(PROJECT_NAME).hex
 $(PROJECT_NAME).hex : $(PROJECT_NAME).ihx
 	@echo "\nPack hex file"
 	@echo "==============="
+	srec_cat -disable_sequence_warnings $< -intel -crop 0x20000 0x2FFFF -offset -0x10000 -o bank2.hex -intel
 	srec_cat -disable_sequence_warnings $< -intel -crop 0x10000 0x1FFFF -offset -0x10000 -o bank1.hex -intel
 	srec_cat -disable_sequence_warnings $< -intel -crop 0x00000 0x0FFFF -o home.ihx -intel
-	srec_cat home.ihx -intel bank1.hex -intel -o $@ -intel
-	rm -fr home.ihx bank1.hex
+	srec_cat home.ihx -intel bank1.hex -intel bank2.hex -intel -o $@ -intel
+	rm -fr home.ihx bank1.hex bank2.hex
 
 $(PROJECT_NAME).ihx: 
 	cp -a $(SUB_DIRS)/$(BINARY_FILE_NAME).c $(PROJ_ROOT)/$(OBJS_DIR)/

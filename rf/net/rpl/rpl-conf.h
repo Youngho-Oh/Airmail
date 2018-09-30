@@ -38,7 +38,8 @@
 #ifndef RPL_CONF_H
 #define RPL_CONF_H
 
-#include "contiki-conf.h"
+//#include "contiki-conf.h"
+#include "rf/rf_config.h"
 
 /* Set to 1 to enable RPL statistics */
 #ifndef RPL_CONF_STATS

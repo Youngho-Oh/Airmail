@@ -41,11 +41,11 @@
  */
 
 
-#include "contiki.h"
-#include "net/rpl/rpl-private.h"
-#include "net/uip.h"
-#include "net/uip-nd6.h"
-#include "net/nbr-table.h"
+//#include "contiki.h"
+#include "rf/net/rpl/rpl-private.h"
+#include "rf/net/uip.h"
+#include "rf/net/uip-nd6.h"
+#include "rf/net/nbr-table.h"
 #include "lib/list.h"
 #include "lib/memb.h"
 #include "sys/ctimer.h"
@@ -54,7 +54,7 @@
 #include <string.h>
 
 #define DEBUG DEBUG_NONE
-#include "net/uip-debug.h"
+#include "rf/net/uip-debug.h"
 
 #if UIP_CONF_IPV6
 /*---------------------------------------------------------------------------*/

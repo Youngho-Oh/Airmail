@@ -32,13 +32,14 @@
  *          Joris Borms <joris.borms@vub.ac.be>
  */
 
-#include "contiki.h"
+//#include "contiki.h"
+#include "rf/rf_config.h"
 
 #include <stddef.h>
 #include <string.h>
 #include "lib/memb.h"
 #include "lib/list.h"
-#include "net/nbr-table.h"
+#include "rf/net/nbr-table.h"
 
 /* List of link-layer addresses of the neighbors, used as key in the tables */
 typedef struct nbr_table_key {

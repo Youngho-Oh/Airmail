@@ -4,7 +4,7 @@ SUB_DIRS =
 
 
 TARGET =
-TARGET_SRCS = clock.c log.c stimer.c sys_clock.c
+TARGET_SRCS = clock.c ctimer.c etimer.c log.c rtimer.c stimer.c sys_clock.c timer.c timetable.c
 #USER_DEFINE = --codeseg BANK1
 
 include $(PROJ_ROOT)/includePost.mk

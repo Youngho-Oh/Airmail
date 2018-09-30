@@ -17,4 +17,6 @@
 
 #define EXTERNAL_BOOL_DEFINED	1
 
+#define CCIF
+
 #endif /* OS_WOW_CONFIG_H_ */
