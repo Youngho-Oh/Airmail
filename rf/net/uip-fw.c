@@ -54,11 +54,11 @@
 
 #include <string.h>
 
-#include "contiki-conf.h"
+//#include "contiki-conf.h"
 
-#include "net/uip.h"
-#include "net/uip_arch.h"
-#include "net/uip-fw.h"
+#include "rf/net/uip.h"
+#include "rf/net/uip_arch.h"
+#include "rf/net/uip-fw.h"
 #ifdef AODV_COMPLIANCE
 #include "net/uaodv-def.h"
 #endif
@@ -245,10 +245,12 @@ time_exceeded(void)
 
   /* Set the IP destination address to be the source address of the
      original packet. */
-  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
+//  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
+  memcpy(((struct tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, ((struct tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, sizeof(uint8_t)*4);
 
   /* Set our IP address as the source address. */
-  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+//  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+  memcpy(((struct tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
 
   /* The size of the ICMP time exceeded packet is 36 + the size of the
      IP header (20) = 56. */
@@ -298,8 +300,10 @@ fwcache_register(void)
 
   fw->timer = FW_TIME;
   fw->ipid = BUF->ipid;
-  uip_ipaddr_copy(&fw->srcipaddr, &BUF->srcipaddr);
-  uip_ipaddr_copy(&fw->destipaddr, &BUF->destipaddr);
+//  uip_ipaddr_copy(&fw->srcipaddr, &BUF->srcipaddr);
+  memcpy(fw->srcipaddr.u8, ((struct tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, sizeof(uint8_t)*4);
+//  uip_ipaddr_copy(&fw->destipaddr, &BUF->destipaddr);
+  memcpy(fw->destipaddr.u8, ((struct tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, sizeof(uint8_t)*4);
   fw->proto = BUF->proto;
 #if notdef
   fw->payload[0] = BUF->srcport;

@@ -47,12 +47,12 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include "lib/list.h"
-#include "net/rime/rimeaddr.h"
-#include "net/packetbuf.h"
-#include "net/uip-ds6-nbr.h"
+#include "rf/net/rime/rimeaddr.h"
+#include "rf/net/packetbuf.h"
+#include "rf/net/uip-ds6-nbr.h"
 
 #define DEBUG DEBUG_NONE
-#include "net/uip-debug.h"
+#include "rf/net/uip-debug.h"
 
 #ifdef UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED
 #define NEIGHBOR_STATE_CHANGED(n) UIP_CONF_DS6_NEIGHBOR_STATE_CHANGED(n)
@@ -83,7 +83,8 @@ uip_ds6_nbr_add(uip_ipaddr_t *ipaddr, uip_lladdr_t *lladdr,
 {
   uip_ds6_nbr_t *nbr = nbr_table_add_lladdr(ds6_neighbors, (rimeaddr_t*)lladdr);
   if(nbr) {
-    uip_ipaddr_copy(&nbr->ipaddr, ipaddr);
+//    uip_ipaddr_copy(&nbr->ipaddr, ipaddr);
+    memcpy(nbr->ipaddr.u8, ipaddr->u8, sizeof(uint8_t)*4);
     nbr->isrouter = isrouter;
     nbr->state = state;
   #if UIP_CONF_IPV6_QUEUE_PKT

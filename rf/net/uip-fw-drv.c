@@ -32,23 +32,23 @@
  *
  */
 
-#include "net/uip-fw.h"
+#include "rf/net/uip-fw.h"
 
 #if !UIP_CONF_IPV6
 
-PROCESS(uip_fw_process, "IP forwarding");
+//PROCESS(uip_fw_process, "IP forwarding");
 
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(uip_fw_process, ev, data)
-{
-  PROCESS_BEGIN();
-
-  tcpip_set_outputfunc(uip_fw_output);
-
-  PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
-
-  PROCESS_END();
-}
+//PROCESS_THREAD(uip_fw_process, ev, data)
+//{
+//  PROCESS_BEGIN();
+//
+//  tcpip_set_outputfunc(uip_fw_output);
+//
+//  PROCESS_WAIT_UNTIL(ev == PROCESS_EVENT_EXIT);
+//
+//  PROCESS_END();
+//}
 /*---------------------------------------------------------------------------*/
 
 #endif /* UIP_CONF_IPV6 */

@@ -1,5 +1,3 @@
-#define DEBUG_PRINTF(...) /*printf(__VA_ARGS__)*/
-
 /**
  * \addtogroup uip
  * @{
@@ -74,6 +72,8 @@
 #include "rf/net/uipopt.h"
 #include "rf/net/uip_arp.h"
 #include "rf/net/uip_arch.h"
+
+//#define DEBUG_PRINTF(...) /*printf(__VA_ARGS__)*/
 
 #if !UIP_CONF_IPV6 /* If UIP_CONF_IPV6 is defined, we compile the
 		      uip6.c file instead of this one. Therefore
@@ -311,7 +311,7 @@ uip_ipchksum(void)
   uint16_t sum;
 
   sum = chksum(0, &uip_buf[UIP_LLH_LEN], UIP_IPH_LEN);
-  DEBUG_PRINTF("uip_ipchksum: sum 0x%04x\n", sum);
+//  DEBUG_PRINTF("uip_ipchksum: sum 0x%04x\n", sum);
   return (sum == 0) ? 0xffff : uip_htons(sum);
 }
 #endif
@@ -453,7 +453,8 @@ uip_connect(uip_ipaddr_t *ripaddr, uint16_t rport)
   conn->sv = 16;   /* Initial value of the RTT variance. */
   conn->lport = uip_htons(lastport);
   conn->rport = rport;
-  uip_ipaddr_copy(&conn->ripaddr, ripaddr);
+//  uip_ipaddr_copy(&conn->ripaddr, ripaddr);
+  memcpy(conn->ripaddr.u8, ripaddr->u8, sizeof(uint8_t)*4);
   
   return conn;
 }
@@ -497,7 +498,8 @@ uip_udp_new(const uip_ipaddr_t *ripaddr, uint16_t rport)
   if(ripaddr == NULL) {
     memset(&conn->ripaddr, 0, sizeof(uip_ipaddr_t));
   } else {
-    uip_ipaddr_copy(&conn->ripaddr, ripaddr);
+//    uip_ipaddr_copy(&conn->ripaddr, ripaddr);
+    memcpy(conn->ripaddr.u8, ripaddr->u8, sizeof(uint8_t)*4);
   }
   conn->ttl = UIP_TTL;
   
@@ -907,7 +909,7 @@ uip_process(uint8_t flag)
     /* If IP broadcast support is configured, we check for a broadcast
        UDP packet, which may be destined to us. */
 #if UIP_BROADCAST
-    DEBUG_PRINTF("UDP IP checksum 0x%04x\n", uip_ipchksum());
+//    DEBUG_PRINTF("UDP IP checksum 0x%04x\n", uip_ipchksum());
     if(BUF->proto == UIP_PROTO_UDP &&
        (uip_ipaddr_cmp(&BUF->destipaddr, &uip_broadcast_addr) ||
 	(BUF->destipaddr.u8[0] & 224) == 224)) {  /* XXX this is a
@@ -1010,8 +1012,10 @@ uip_process(uint8_t flag)
   }
 
   /* Swap IP addresses. */
-  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
-  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+//  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, ((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, sizeof(uint8_t)*4);
+//  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
 
   UIP_STAT(++uip_stat.icmp.sent);
   BUF->ttl = UIP_TTL;
@@ -1115,8 +1119,11 @@ uip_process(uint8_t flag)
   }
 
   /* Demultiplex this UDP packet between the UDP "connections". */
-  for(uip_udp_conn = &uip_udp_conns[0];
-      uip_udp_conn < &uip_udp_conns[UIP_UDP_CONNS];
+//  for(uip_udp_conn = &uip_udp_conns[0];
+//      uip_udp_conn < &uip_udp_conns[UIP_UDP_CONNS];
+//      ++uip_udp_conn) {
+  for(uip_udp_conn = uip_udp_conns[0];
+      uip_udp_conn < uip_udp_conns[UIP_UDP_CONNS];
       ++uip_udp_conn) {
     /* If the local UDP port is non-zero, the connection is considered
        to be used. If so, the local port number is checked against the
@@ -1150,10 +1157,12 @@ uip_process(uint8_t flag)
 
   /* Set the IP destination address to be the source address of the
      original packet. */
-  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
+//  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, ((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, sizeof(uint8_t)*4);
 
   /* Set our IP address as the source address. */
-  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+//  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
 
   /* The size of the ICMP destination unreachable packet is 36 + the
      size of the IP header (20) = 56. */
@@ -1200,9 +1209,11 @@ uip_process(uint8_t flag)
   BUF->srcport  = uip_udp_conn->lport;
   BUF->destport = uip_udp_conn->rport;
 
-  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
-  uip_ipaddr_copy(&BUF->destipaddr, &uip_udp_conn->ripaddr);
-   
+//  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
+//  uip_ipaddr_copy(&BUF->destipaddr, &uip_udp_conn->ripaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, uip_udp_conn->ripaddr.u8, sizeof(uint8_t)*4);
+
   uip_appdata = &uip_buf[UIP_LLH_LEN + UIP_IPTCPH_LEN];
 
 #if UIP_UDP_CHECKSUMS
@@ -1314,8 +1325,10 @@ uip_process(uint8_t flag)
   BUF->destport = tmp16;
   
   /* Swap IP addresses. */
-  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
-  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+//  uip_ipaddr_copy(&BUF->destipaddr, &BUF->srcipaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, ((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, sizeof(uint8_t)*4);
+//  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
   
   /* And send out the RST packet! */
   goto tcp_send_noconn;
@@ -1361,7 +1374,8 @@ uip_process(uint8_t flag)
   uip_connr->nrtx = 0;
   uip_connr->lport = BUF->destport;
   uip_connr->rport = BUF->srcport;
-  uip_ipaddr_copy(&uip_connr->ripaddr, &BUF->srcipaddr);
+//  uip_ipaddr_copy(&uip_connr->ripaddr, &BUF->srcipaddr);
+  memcpy(uip_connr->ripaddr.u8, ((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, sizeof(uint8_t)*4);
   uip_connr->tcpstateflags = UIP_SYN_RCVD;
 
   uip_connr->snd_nxt[0] = iss[0];
@@ -1877,8 +1891,10 @@ uip_process(uint8_t flag)
   BUF->srcport  = uip_connr->lport;
   BUF->destport = uip_connr->rport;
 
-  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
-  uip_ipaddr_copy(&BUF->destipaddr, &uip_connr->ripaddr);
+//  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
+//  uip_ipaddr_copy(&BUF->destipaddr, &uip_connr->ripaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, uip_connr->ripaddr.u8, sizeof(uint8_t)*4);
 
   if(uip_connr->tcpstateflags & UIP_STOPPED) {
     /* If the connection has issued uip_stop(), we advertise a zero
@@ -1923,14 +1939,14 @@ uip_process(uint8_t flag)
   /* Calculate IP checksum. */
   BUF->ipchksum = 0;
   BUF->ipchksum = ~(uip_ipchksum());
-  DEBUG_PRINTF("uip ip_send_nolen: chkecum 0x%04x\n", uip_ipchksum());
+//  DEBUG_PRINTF("uip ip_send_nolen: chkecum 0x%04x\n", uip_ipchksum());
 #endif /* UIP_CONF_IPV6 */   
   UIP_STAT(++uip_stat.tcp.sent);
 #if UIP_CONF_IPV6
  send:
 #endif /* UIP_CONF_IPV6 */
-  DEBUG_PRINTF("Sending packet with length %d (%d)\n", uip_len,
-	       (BUF->len[0] << 8) | BUF->len[1]);
+//  DEBUG_PRINTF("Sending packet with length %d (%d)\n", uip_len,
+//	       (BUF->len[0] << 8) | BUF->len[1]);
   
   UIP_STAT(++uip_stat.ip.sent);
   /* Return and let the caller do the actual transmission. */

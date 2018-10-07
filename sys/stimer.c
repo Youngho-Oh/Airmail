@@ -46,7 +46,7 @@
 
 //#include "contiki-conf.h"
 //#include "sys/clock.h"
-#include <hal_clock.h>
+#include "hal/hal_clock.h"
 #include "sys/stimer.h"
 
 #define SCLOCK_GEQ(a, b)	((unsigned long)((a) - (b)) < \

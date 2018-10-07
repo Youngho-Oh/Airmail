@@ -38,6 +38,7 @@
  */
 
 #include "sys/timetable-aggregate.h"
+#include "rf/rf_config.h"
 
 #define XXX_HACK_MAX_CATEGORIES 32
 

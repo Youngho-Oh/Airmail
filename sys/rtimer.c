@@ -44,6 +44,8 @@
  *
  */
 
+#include "stdio.h"
+
 #include "sys/rtimer.h"
 //#include "contiki.h"
 

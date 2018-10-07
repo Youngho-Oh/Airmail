@@ -37,14 +37,14 @@
  *         Joakim Eriksson <joakime@sics.se>
  */
 
-#include "net/uip-debug.h"
+#include "rf/net/uip-debug.h"
 
 /*---------------------------------------------------------------------------*/
 void
 uip_debug_ipaddr_print(const uip_ipaddr_t *addr)
 {
-  if(addr == NULL || addr->u8 == NULL) {
-    printf("(NULL IP addr)");
+  if(addr == NULL){// || addr->u8 == NULL) {
+//    printf("(NULL IP addr)");
     return;
   }
 #if UIP_CONF_IPV6

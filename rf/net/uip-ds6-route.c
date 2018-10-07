@@ -29,12 +29,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-#include "net/uip-ds6.h"
-#include "net/uip.h"
+#include "rf/net/uip-ds6.h"
+#include "rf/net/uip.h"
 
 #include "lib/list.h"
 #include "lib/memb.h"
-#include "net/nbr-table.h"
+#include "rf/net/nbr-table.h"
 
 #if UIP_CONF_IPV6
 

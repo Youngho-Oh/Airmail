@@ -43,11 +43,12 @@
 
 //#include "contiki-net.h"
 #include "rf/net/simple-udp.h"
+#include "rf/net/uip-udp-packet.h"
 
 #include <string.h>
 
 
-PROCESS(simple_udp_process, "Simple UDP process");
+//PROCESS(simple_udp_process, "Simple UDP process");
 static uint8_t started = 0;
 static uint8_t databuffer[UIP_BUFSIZE];
 
@@ -173,16 +174,17 @@ simple_udp_register(struct simple_udp_connection *c,
   c->local_port = local_port;
   c->remote_port = remote_port;
   if(remote_addr != NULL) {
-    uip_ipaddr_copy(&c->remote_addr, remote_addr);
+//    uip_ipaddr_copy(&c->remote_addr, remote_addr);
+    memcpy(c->remote_addr.u8, remote_addr->u8, sizeof(uint8_t)*4);
   }
   c->receive_callback = receive_callback;
 
-  PROCESS_CONTEXT_BEGIN(&simple_udp_process);
+//  PROCESS_CONTEXT_BEGIN(&simple_udp_process);
   c->udp_conn = udp_new(remote_addr, UIP_HTONS(remote_port), c);
   if(c->udp_conn != NULL) {
     udp_bind(c->udp_conn, UIP_HTONS(local_port));
   }
-  PROCESS_CONTEXT_END();
+//  PROCESS_CONTEXT_END();
 
   if(c->udp_conn == NULL) {
     return 0;
@@ -190,54 +192,54 @@ simple_udp_register(struct simple_udp_connection *c,
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(simple_udp_process, ev, data)
-{
-  struct simple_udp_connection *c;
-  PROCESS_BEGIN();
-  
-  while(1) {
-    PROCESS_WAIT_EVENT();
-    if(ev == tcpip_event) {
-
-      /* An appstate pointer is passed to use from the IP stack
-         through the 'data' pointer. We registered this appstate when
-         we did the udp_new() call in simple_udp_register() as the
-         struct simple_udp_connection pointer. So we extract this
-         pointer and use it when calling the reception callback. */
-      c = (struct simple_udp_connection *)data;
-
-      /* Defensive coding: although the appstate *should* be non-null
-         here, we make sure to avoid the program crashing on us. */
-      if(c != NULL) {
-
-        /* If we were called because of incoming data, we should call
-           the reception callback. */
-        if(uip_newdata()) {
-          /* Copy the data from the uIP data buffer into our own
-             buffer to avoid the uIP buffer being messed with by the
-             callee. */
-          memcpy(databuffer, uip_appdata, uip_datalen());
-
-          /* Call the client process. We use the PROCESS_CONTEXT
-             mechanism to temporarily switch process context to the
-             client process. */
-          if(c->receive_callback != NULL) {
-            PROCESS_CONTEXT_BEGIN(c->client_process);
-            c->receive_callback(c,
-                                &(UIP_IP_BUF->srcipaddr),
-                                UIP_HTONS(UIP_IP_BUF->srcport),
-                                &(UIP_IP_BUF->destipaddr),
-                                UIP_HTONS(UIP_IP_BUF->destport),
-                                databuffer, uip_datalen());
-            PROCESS_CONTEXT_END();
-          }
-        }
-      }
-    }
-
-  }
-
-  PROCESS_END();
-}
+//PROCESS_THREAD(simple_udp_process, ev, data)
+//{
+//  struct simple_udp_connection *c;
+//  PROCESS_BEGIN();
+//
+//  while(1) {
+//    PROCESS_WAIT_EVENT();
+//    if(ev == tcpip_event) {
+//
+//      /* An appstate pointer is passed to use from the IP stack
+//         through the 'data' pointer. We registered this appstate when
+//         we did the udp_new() call in simple_udp_register() as the
+//         struct simple_udp_connection pointer. So we extract this
+//         pointer and use it when calling the reception callback. */
+//      c = (struct simple_udp_connection *)data;
+//
+//      /* Defensive coding: although the appstate *should* be non-null
+//         here, we make sure to avoid the program crashing on us. */
+//      if(c != NULL) {
+//
+//        /* If we were called because of incoming data, we should call
+//           the reception callback. */
+//        if(uip_newdata()) {
+//          /* Copy the data from the uIP data buffer into our own
+//             buffer to avoid the uIP buffer being messed with by the
+//             callee. */
+//          memcpy(databuffer, uip_appdata, uip_datalen());
+//
+//          /* Call the client process. We use the PROCESS_CONTEXT
+//             mechanism to temporarily switch process context to the
+//             client process. */
+//          if(c->receive_callback != NULL) {
+//            PROCESS_CONTEXT_BEGIN(c->client_process);
+//            c->receive_callback(c,
+//                                &(UIP_IP_BUF->srcipaddr),
+//                                UIP_HTONS(UIP_IP_BUF->srcport),
+//                                &(UIP_IP_BUF->destipaddr),
+//                                UIP_HTONS(UIP_IP_BUF->destport),
+//                                databuffer, uip_datalen());
+//            PROCESS_CONTEXT_END();
+//          }
+//        }
+//      }
+//    }
+//
+//  }
+//
+//  PROCESS_END();
+//}
 /*---------------------------------------------------------------------------*/
 /** @} */

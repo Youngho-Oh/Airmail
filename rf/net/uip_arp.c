@@ -58,7 +58,7 @@
  */
 
 
-#include "net/uip_arp.h"
+#include "rf/net/uip_arp.h"
 
 #include <string.h>
 
@@ -219,7 +219,8 @@ uip_arp_update(uip_ipaddr_t *ipaddr, struct uip_eth_addr *ethaddr)
 
   /* Now, i is the ARP table entry which we will fill with the new
      information. */
-  uip_ipaddr_copy(&tabptr->ipaddr, ipaddr);
+//  uip_ipaddr_copy(&tabptr->ipaddr, ipaddr);
+  memcpy(tabptr->ipaddr.u8, ipaddr->u8, sizeof(uint8_t)*4);
   memcpy(tabptr->ethaddr.addr, ethaddr->addr, 6);
   tabptr->time = arptime;
 }
@@ -315,8 +316,11 @@ uip_arp_arpin(void)
       memcpy(BUF->ethhdr.src.addr, uip_lladdr.addr, 6);
       memcpy(BUF->ethhdr.dest.addr, BUF->dhwaddr.addr, 6);
       
-      uip_ipaddr_copy(&BUF->dipaddr, &BUF->sipaddr);
-      uip_ipaddr_copy(&BUF->sipaddr, &uip_hostaddr);
+//      uip_ipaddr_copy(&BUF->dipaddr, &BUF->sipaddr);
+      memcpy(((struct arp_hdr *)&(uip_aligned_buf.u8)[0])->dipaddr.u8, ((struct arp_hdr *)&(uip_aligned_buf.u8)[0])->sipaddr.u8, sizeof(uint8_t)*4);
+
+//      uip_ipaddr_copy(&BUF->sipaddr, &uip_hostaddr);
+      memcpy(((struct arp_hdr *)&(uip_aligned_buf.u8)[0])->sipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
 
       BUF->ethhdr.type = UIP_HTONS(UIP_ETHTYPE_ARP);
       uip_len = sizeof(struct arp_hdr);
@@ -390,10 +394,12 @@ uip_arp_out(void)
       /* Destination address was not on the local network, so we need to
 	 use the default router's IP address instead of the destination
 	 address when determining the MAC address. */
-      uip_ipaddr_copy(&ipaddr, &uip_draddr);
+//      uip_ipaddr_copy(&ipaddr, &uip_draddr);
+      memcpy(ipaddr.u8, uip_draddr.u8, sizeof(uint8_t)*4);
     } else {
       /* Else, we use the destination IP address. */
-      uip_ipaddr_copy(&ipaddr, &IPBUF->destipaddr);
+//      uip_ipaddr_copy(&ipaddr, &IPBUF->destipaddr);
+      memcpy(ipaddr.u8, ((struct ethip_hdr *)&(uip_aligned_buf.u8)[0])->destipaddr.u8, sizeof(uint8_t)*4);
     }
     for(i = 0; i < UIP_ARPTAB_SIZE; ++i) {
       if(uip_ipaddr_cmp(&ipaddr, &tabptr->ipaddr)) {
@@ -411,8 +417,10 @@ uip_arp_out(void)
       memcpy(BUF->ethhdr.src.addr, uip_lladdr.addr, 6);
       memcpy(BUF->shwaddr.addr, uip_lladdr.addr, 6);
     
-      uip_ipaddr_copy(&BUF->dipaddr, &ipaddr);
-      uip_ipaddr_copy(&BUF->sipaddr, &uip_hostaddr);
+//      uip_ipaddr_copy(&BUF->dipaddr, &ipaddr);
+      memcpy(((struct arp_hdr *)&(uip_aligned_buf.u8)[0])->dipaddr.u8, ipaddr.u8, sizeof(uint8_t)*4);
+//      uip_ipaddr_copy(&BUF->sipaddr, &uip_hostaddr);
+      memcpy(((struct arp_hdr *)&(uip_aligned_buf.u8)[0])->sipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
       BUF->opcode = UIP_HTONS(ARP_REQUEST); /* ARP request. */
       BUF->hwtype = UIP_HTONS(ARP_HWTYPE_ETH);
       BUF->protocol = UIP_HTONS(UIP_ETHTYPE_IP);

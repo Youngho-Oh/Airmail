@@ -558,7 +558,8 @@ mdns_write_announce_records(unsigned char *queryptr, uint8_t *count)
   ans->ttl[0] = 0;
   ans->ttl[1] = UIP_HTONS(120);
   ans->len = UIP_HTONS(sizeof(uip_ipaddr_t));
-  uip_gethostaddr((uip_ipaddr_t *) ans->ipaddr);
+//  uip_gethostaddr((uip_ipaddr_t *) ans->ipaddr);
+  memcpy(&(ans->ipaddr), (uip_hostaddr.u8), (sizeof(uint8_t)*4));
   queryptr = (unsigned char *)ans + sizeof(*ans);
   ++(*count);
 #endif /* UIP_CONF_IPV6 */
@@ -1043,7 +1044,8 @@ newdata(void)
     namemapptr->expiration += clock_seconds();
 #endif /* RESOLV_SUPPORTS_RECORD_EXPIRATION */
 
-    uip_ipaddr_copy(&namemapptr->ipaddr, (uip_ipaddr_t *) ans->ipaddr);
+//    uip_ipaddr_copy(&namemapptr->ipaddr, (uip_ipaddr_t *) ans->ipaddr);
+    memcpy(namemapptr->ipaddr.u8, ans->ipaddr, sizeof(uint8_t)*4);
 
     resolv_found(namemapptr->name, &namemapptr->ipaddr);
 
@@ -1419,7 +1421,8 @@ resolv_getserver(void)
 void
 resolv_conf(const uip_ipaddr_t * dnsserver)
 {
-  uip_ipaddr_copy(&resolv_default_dns_server, dnsserver);
+//  uip_ipaddr_copy(&resolv_default_dns_server, dnsserver);
+  memcpy(resolv_default_dns_server.u8, dnsserver->u8, sizeof(uint8_t)*4 );
 }
 /*---------------------------------------------------------------------------*/
 /** \internal

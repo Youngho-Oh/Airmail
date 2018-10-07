@@ -44,9 +44,9 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include "lib/random.h"
-#include "net/uip-nd6.h"
-#include "net/uip-ds6.h"
-#include "net/uip-packetqueue.h"
+#include "rf/net/uip-nd6.h"
+#include "rf/net/uip-ds6.h"
+#include "rf/net/uip-packetqueue.h"
 
 #if UIP_CONF_IPV6
 

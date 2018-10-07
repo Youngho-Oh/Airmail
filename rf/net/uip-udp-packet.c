@@ -37,11 +37,12 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
-#include "contiki-conf.h"
+//#include "contiki-conf.h"
+#include "rf/rf_config.h"
 
 extern uint16_t uip_slen;
 
-#include "net/uip-udp-packet.h"
+#include "rf/net/uip-udp-packet.h"
 
 #include <string.h>
 
@@ -78,17 +79,20 @@ uip_udp_packet_sendto(struct uip_udp_conn *c, const void *data, int len,
 
   if(toaddr != NULL) {
     /* Save current IP addr/port. */
-    uip_ipaddr_copy(&curaddr, &c->ripaddr);
+//    uip_ipaddr_copy(&curaddr, &c->ripaddr);
+	  memcpy(curaddr.u8, c->ripaddr.u8, sizeof(uint8_t)*4);
     curport = c->rport;
 
     /* Load new IP addr/port */
-    uip_ipaddr_copy(&c->ripaddr, toaddr);
+//    uip_ipaddr_copy(&c->ripaddr, toaddr);
+    memcpy(c->ripaddr.u8, toaddr->u8, sizeof(uint8_t)*4);
     c->rport = toport;
 
     uip_udp_packet_send(c, data, len);
 
     /* Restore old IP addr/port */
-    uip_ipaddr_copy(&c->ripaddr, &curaddr);
+//    uip_ipaddr_copy(&c->ripaddr, &curaddr);
+    memcpy(c->ripaddr.u8, curaddr.u8, sizeof(uint8_t)*4);
     c->rport = curport;
   }
 }
