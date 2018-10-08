@@ -36,6 +36,7 @@ int main()
 		wow_sche_task_init();
 		// start kernel clock
 		wow_clock_start();
+		// XXX create to RF Task
 	}
 
 	/* Start User main function */
