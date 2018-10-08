@@ -590,4 +590,11 @@ uip_ds6_defrt_periodic(void)
 }
 /*---------------------------------------------------------------------------*/
 
+#else
+
+void uip_ds6_defrt_rm(uip_ds6_defrt_t *defrt)
+{
+	return;
+}
+
 #endif /* UIP_CONF_IPV6 */

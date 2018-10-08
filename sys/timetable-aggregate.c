@@ -103,15 +103,16 @@ timetable_aggregate_print_detailed(struct timetable_aggregate *a)
   int i;
   /*  printf("timetable_aggregate_print_detailed: a ptr %d\n", a->ptr);*/
   for(i = 0; i < a->ptr; ++i) {
-    printf("-- %s: %lu / %u = %lu\n", a->entries[i].id,
-	   a->entries[i].time,
-	   a->entries[i].episodes,
-	   a->entries[i].time / a->entries[i].episodes);
+//    printf("-- %s: %lu / %u = %lu\n", a->entries[i].id,
+//	   a->entries[i].time,
+//	   a->entries[i].episodes,
+//	   a->entries[i].time / a->entries[i].episodes);
+	  ;
   }
   
-  printf("Memory for entries: %d * %d = %d\n",
-	 (int)sizeof(struct timetable_aggregate), a->ptr,
-	 (int)sizeof(struct timetable_aggregate) * a->ptr);
+//  printf("Memory for entries: %d * %d = %d\n",
+//	 (int)sizeof(struct timetable_aggregate), a->ptr,
+//	 (int)sizeof(struct timetable_aggregate) * a->ptr);
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -131,16 +132,17 @@ timetable_aggregate_print_categories(struct timetable_aggregate *a)
 
   /*  printf("timetable_aggregate_print_categories: a ptr %d\n", a->ptr);*/
   for(i = 0; i < a->ptr; ++i) {
-    printf("-- %c%c: %lu / %u = %lu\n",
-	   a->entries[i].id[0], a->entries[i].id[1],
-	   a->entries[i].time,
-	   a->entries[i].episodes,
-	   a->entries[i].time / a->entries[i].episodes);
+//    printf("-- %c%c: %lu / %u = %lu\n",
+//	   a->entries[i].id[0], a->entries[i].id[1],
+//	   a->entries[i].time,
+//	   a->entries[i].episodes,
+//	   a->entries[i].time / a->entries[i].episodes);
+	  ;
   }
 
-  printf("Memory for entries: %d * %d = %d\n",
-	 (int)sizeof(struct timetable_aggregate), a->ptr,
-	 (int)sizeof(struct timetable_aggregate) * a->ptr);
+//  printf("Memory for entries: %d * %d = %d\n",
+//	 (int)sizeof(struct timetable_aggregate), a->ptr,
+//	 (int)sizeof(struct timetable_aggregate) * a->ptr);
 }
 /*---------------------------------------------------------------------------*/
 void

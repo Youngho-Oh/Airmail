@@ -971,4 +971,11 @@ discard:
 #endif /* !UIP_CONF_ROUTER */
 
  /** @} */
+#else
+
+void uip_nd6_ns_output(uip_ipaddr_t *src, uip_ipaddr_t *dest, uip_ipaddr_t *tgt)
+{
+	;
+}
+
 #endif /* UIP_CONF_IPV6 */

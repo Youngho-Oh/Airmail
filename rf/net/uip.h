@@ -1365,7 +1365,7 @@ struct uip_udp_conn {
 /**
  * The current UDP connection.
  */
-extern struct uip_udp_conn *uip_udp_conn;
+extern struct uip_udp_conn *uip_udp_conn_ptr;
 extern struct uip_udp_conn uip_udp_conns[UIP_UDP_CONNS];
 
 struct uip_fallback_interface {

@@ -146,7 +146,7 @@ void rtimer_run_next(void);
 
 void rtimer_arch_init(void);
 void rtimer_arch_schedule(rtimer_clock_t t);
-/*rtimer_clock_t rtimer_arch_now(void);*/
+rtimer_clock_t rtimer_arch_now(void);
 
 #define RTIMER_SECOND RTIMER_ARCH_SECOND
 

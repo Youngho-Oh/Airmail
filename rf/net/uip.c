@@ -80,9 +80,8 @@
 		      this #ifndef removes the entire compilation
 		      output of the uip.c file */
 
-
 #if UIP_CONF_IPV6
-#include "net/uip-neighbor.h"
+#include "rf/net/uip-neighbor.h"
 #endif /* UIP_CONF_IPV6 */
 
 #include <string.h>
@@ -158,7 +157,7 @@ uint16_t uip_listenports[UIP_LISTENPORTS];
                              /* The uip_listenports list all currently
 				listning ports. */
 #if UIP_UDP
-struct uip_udp_conn *uip_udp_conn;
+struct uip_udp_conn *uip_udp_conn_ptr;
 struct uip_udp_conn uip_udp_conns[UIP_UDP_CONNS];
 #endif /* UIP_UDP */
 
@@ -674,6 +673,8 @@ uip_add_rcv_nxt(uint16_t n)
 void
 uip_process(uint8_t flag)
 {
+//XXX
+#if 0
   register struct uip_conn *uip_connr = uip_conn;
 
 #if UIP_UDP
@@ -1119,12 +1120,9 @@ uip_process(uint8_t flag)
   }
 
   /* Demultiplex this UDP packet between the UDP "connections". */
-//  for(uip_udp_conn = &uip_udp_conns[0];
-//      uip_udp_conn < &uip_udp_conns[UIP_UDP_CONNS];
-//      ++uip_udp_conn) {
-  for(uip_udp_conn = uip_udp_conns[0];
-      uip_udp_conn < uip_udp_conns[UIP_UDP_CONNS];
-      ++uip_udp_conn) {
+  for(uip_udp_conn_ptr = &uip_udp_conns[0];
+	   uip_udp_conn_ptr < &uip_udp_conns[UIP_UDP_CONNS];
+      ++uip_udp_conn_ptr) {
     /* If the local UDP port is non-zero, the connection is considered
        to be used. If so, the local port number is checked against the
        destination port number in the received packet. If the two port
@@ -1132,13 +1130,13 @@ uip_process(uint8_t flag)
        connection is bound to a remote port. Finally, if the
        connection is bound to a remote IP address, the source IP
        address of the packet is checked. */
-    if(uip_udp_conn->lport != 0 &&
-       UDPBUF->destport == uip_udp_conn->lport &&
-       (uip_udp_conn->rport == 0 ||
-        UDPBUF->srcport == uip_udp_conn->rport) &&
-       (uip_ipaddr_cmp(&uip_udp_conn->ripaddr, &uip_all_zeroes_addr) ||
-	uip_ipaddr_cmp(&uip_udp_conn->ripaddr, &uip_broadcast_addr) ||
-	uip_ipaddr_cmp(&BUF->srcipaddr, &uip_udp_conn->ripaddr))) {
+    if(uip_udp_conn_ptr->lport != 0 &&
+       UDPBUF->destport == uip_udp_conn_ptr->lport &&
+       (uip_udp_conn_ptr->rport == 0 ||
+        UDPBUF->srcport == uip_udp_conn_ptr->rport) &&
+       (uip_ipaddr_cmp(&uip_udp_conn_ptr->ripaddr, &uip_all_zeroes_addr) ||
+	uip_ipaddr_cmp(&uip_udp_conn_ptr->ripaddr, &uip_broadcast_addr) ||
+	uip_ipaddr_cmp(&BUF->srcipaddr, &uip_udp_conn_ptr->ripaddr))) {
       goto udp_found;
     }
   }
@@ -1200,19 +1198,19 @@ uip_process(uint8_t flag)
   BUF->len[1] = (uip_len & 0xff);
 #endif /* UIP_CONF_IPV6 */
 
-  BUF->ttl = uip_udp_conn->ttl;
+  BUF->ttl = uip_udp_conn_ptr->ttl;
   BUF->proto = UIP_PROTO_UDP;
 
   UDPBUF->udplen = UIP_HTONS(uip_slen + UIP_UDPH_LEN);
   UDPBUF->udpchksum = 0;
 
-  BUF->srcport  = uip_udp_conn->lport;
-  BUF->destport = uip_udp_conn->rport;
+  BUF->srcport  = uip_udp_conn_ptr->lport;
+  BUF->destport = uip_udp_conn_ptr->rport;
 
 //  uip_ipaddr_copy(&BUF->srcipaddr, &uip_hostaddr);
   memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->srcipaddr.u8, uip_hostaddr.u8, sizeof(uint8_t)*4);
-//  uip_ipaddr_copy(&BUF->destipaddr, &uip_udp_conn->ripaddr);
-  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, uip_udp_conn->ripaddr.u8, sizeof(uint8_t)*4);
+//  uip_ipaddr_copy(&BUF->destipaddr, &uip_udp_conn_ptr->ripaddr);
+  memcpy(((struct uip_tcpip_hdr *)&(uip_aligned_buf.u8)[14])->destipaddr.u8, uip_udp_conn_ptr->ripaddr.u8, sizeof(uint8_t)*4);
 
   uip_appdata = &uip_buf[UIP_LLH_LEN + UIP_IPTCPH_LEN];
 
@@ -1956,6 +1954,8 @@ uip_process(uint8_t flag)
  drop:
   uip_len = 0;
   uip_flags = 0;
+//XXX
+#endif
   return;
 }
 /*---------------------------------------------------------------------------*/
@@ -1984,6 +1984,12 @@ uip_send(const void *data, int len)
       memcpy(uip_sappdata, (data), uip_slen);
     }
   }
+}
+
+//XXX
+void uip_log(char *msg)
+{
+	;
 }
 /*---------------------------------------------------------------------------*/
 /** @} */

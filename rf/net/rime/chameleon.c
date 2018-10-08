@@ -54,6 +54,9 @@
 
 extern const struct chameleon_module CHAMELEON_MODULE;
 
+//XXX
+const struct chameleon_module chameleon_bitopt;
+
 #define DEBUG 0
 #if DEBUG
 #include <stdio.h>

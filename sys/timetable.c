@@ -122,9 +122,9 @@ timetable_print(struct timetable *t)
   
   time = t->timestamps[0].time;
 
-  printf("---\n");
+//  printf("---\n");
   for(i = 1; i < *t->ptr; ++i) {
-    printf("%s: %u\n", t->timestamps[i - 1].id, t->timestamps[i].time - time);
+//    printf("%s: %u\n", t->timestamps[i - 1].id, t->timestamps[i].time - time);
     time = t->timestamps[i].time;
   }
 }

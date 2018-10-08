@@ -57,7 +57,8 @@ void uip_debug_lladdr_print(const uip_lladdr_t *addr);
 #include <avr/pgmspace.h>
 #define PRINTA(FORMAT,args...) printf_P(PSTR(FORMAT),##args)
 #else
-#define PRINTA(...) printf(__VA_ARGS__)
+//#define PRINTA(...) printf(__VA_ARGS__)
+#define PRINTA(...)
 #endif
 
 #if (DEBUG) & DEBUG_ANNOTATE

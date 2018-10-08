@@ -762,7 +762,7 @@ tcpip_uipcall(void)
   if(uip_conn != NULL) {
     ts = &uip_conn->appstate;
   } else {
-    ts = &uip_udp_conn->appstate;
+    ts = &uip_udp_conn_ptr->appstate;
   }
 #else /* UIP_UDP */
   ts = &uip_conn->appstate;

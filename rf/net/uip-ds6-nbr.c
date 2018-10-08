@@ -297,3 +297,8 @@ uip_ds6_get_least_lifetime_neighbor(void)
   }
   return nbr_expiring;
 }
+
+uip_ds6_defrt_t *uip_ds6_defrt_lookup(uip_ipaddr_t *ipaddr)
+{
+	return NULL;
+}

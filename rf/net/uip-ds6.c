@@ -699,4 +699,8 @@ uip_ds6_compute_reachable_time(void)
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
+#else
+
+uip_ds6_netif_t uip_ds6_if;
+
 #endif /* UIP_CONF_IPV6 */

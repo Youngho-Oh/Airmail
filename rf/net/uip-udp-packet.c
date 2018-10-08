@@ -52,7 +52,7 @@ uip_udp_packet_send(struct uip_udp_conn *c, const void *data, int len)
 {
 #if UIP_UDP
   if(data != NULL) {
-    uip_udp_conn = c;
+    uip_udp_conn_ptr = c;
     uip_slen = len;
     memcpy(&uip_buf[UIP_LLH_LEN + UIP_IPUDPH_LEN], data,
            len > UIP_BUFSIZE - UIP_LLH_LEN - UIP_IPUDPH_LEN?
