@@ -8,9 +8,9 @@ all: $(PROJECT_NAME).hex
 $(PROJECT_NAME).hex : $(PROJECT_NAME).ihx
 	@echo "\nPack hex file"
 	@echo "==============="
-	srec_cat -disable_sequence_warnings $< -intel -crop 0x20000 0x2FFFF -offset -0x10000 -o bank2.hex -intel
-	srec_cat -disable_sequence_warnings $< -intel -crop 0x10000 0x1FFFF -offset -0x10000 -o bank1.hex -intel
-	srec_cat -disable_sequence_warnings $< -intel -crop 0x00000 0x0FFFF -o home.ihx -intel
+	srec_cat -disable_sequence_warnings $< -intel -crop 0x18000 0x1FFFF -offset -65536 -o bank1.hex -intel
+	srec_cat -disable_sequence_warnings $< -intel -crop 0x28000 0x2FFFF -offset -98304 -o bank2.hex -intel	
+	srec_cat -disable_sequence_warnings $< -intel -crop 0x00000 0x07FFF -o home.ihx -intel
 	srec_cat home.ihx -intel bank1.hex -intel bank2.hex -intel -o $@ -intel
 	rm -fr home.ihx bank1.hex bank2.hex
 

@@ -71,7 +71,7 @@ T_ERROR _task_rf_event_init(void)
 
 	/* Set up RF for IEEE 802.15.4 */
 	{
-		val_return = basicRfInit(&rfValue);
+//		val_return = basicRfInit(&rfValue);
 		if( val_return == SUCCESS ){
 			log_message("Success to init RF\r\n",20);
 			sys_setting.enable_rf = 1;
@@ -93,7 +93,7 @@ static T_ERROR _task_rf_event_law_send(void)
 	log_message("RF law data send\r\n",18);
 
 	//TODO : send test
-	basicRfSendPacket(des_addr, data_buf, 8);
+//	basicRfSendPacket(des_addr, data_buf, 8);
 
 	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 1000);
 
