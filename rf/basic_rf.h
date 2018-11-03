@@ -48,31 +48,32 @@
 /***********************************************************************************
 * INCLUDES
 */
-#include "../hal/common.h"
+#include "hal/common.h"
+#include "rf/rf_config.h"
 
 /***********************************************************************************
 * TYPEDEFS
 */
 
 typedef struct {
-    unsigned short myAddr;
-    unsigned short panId;
-    unsigned char channel;
-    unsigned char ackRequest;
+    uint16_t myAddr;
+    uint16_t panId;
+    uint8_t channel;
+    uint8_t ackRequest;
     #ifdef SECURITY_CCM
-    unsigned char* securityKey;
-    unsigned char* securityNonce;
+    uint8_t* securityKey;
+    uint8_t* securityNonce;
     #endif
 } basicRfCfg_t;
 
 /***********************************************************************************
 * GLOBAL FUNCTIONS
 */
-unsigned char basicRfInit(basicRfCfg_t* pRfConfig);
-unsigned char basicRfSendPacket(unsigned short destAddr, unsigned char* pPayload, unsigned char length);
-unsigned char basicRfPacketIsReady(void);
-char basicRfGetRssi(void);
-unsigned char basicRfReceive(unsigned char* pRxData, unsigned char len, short* pRssi);
+uint8_t basicRfInit(basicRfCfg_t* pRfConfig);
+uint8_t basicRfSendPacket(uint16_t destAddr, uint8_t* pPayload, uint8_t length);
+uint8_t basicRfPacketIsReady(void);
+int8_t basicRfGetRssi(void);
+uint8_t basicRfReceive(uint8_t* pRxData, uint8_t len, int16_t* pRssi);
 void basicRfReceiveOn(void);
 void basicRfReceiveOff(void);
 

@@ -72,7 +72,7 @@ memb_alloc(struct memb *m)
 
   /* No free block was found, so we return NULL to indicate failure to
      allocate block. */
-  return NULL;
+  return 0;
 }
 /*---------------------------------------------------------------------------*/
 char

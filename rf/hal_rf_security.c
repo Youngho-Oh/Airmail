@@ -9,14 +9,15 @@
 /***********************************************************************************
 * INCLUDES
 */
+#include "hal/common.h"
+
 #include "hal/hal_mcu.h"
-#include "hal_rf.h"
-#include "hal_rf_security.h"
+#include "rf/hal_rf.h"
+#include "rf/hal_rf_security.h"
+#include "hal/util.h"
+#include "rf/rf_config.h"
 
 #include "hal/hal_clock.h"
-#include "hal/common.h"
-#include "hal/util.h"
-
 
 /***********************************************************************************
 * CONSTANTS AND DEFINES
@@ -58,21 +59,21 @@
 /***********************************************************************************
 * LOCAL DATA
 */
-static  unsigned char nonceTx[16];
-static  unsigned char nonceRx[16];
-static  unsigned char IV[16];
-static  unsigned char cipherText[128];
-static  unsigned char buf[128];
+static  uint8_t nonceTx[16];
+static  uint8_t nonceRx[16];
+static  uint8_t IV[16];
+static  uint8_t cipherText[128];
+static  uint8_t buf[128];
 
 
 /***********************************************************************************
 * LOCAL FUNCTIONS
 */
-static void halAesEncrypt(unsigned char mode, unsigned char *pDataIn, unsigned short length, unsigned char *pDataOut,
-                          unsigned char *pInitVector);
-static void halAesDecrypt(unsigned char mode, unsigned char *pDataIn, unsigned short length, unsigned char *pDataOut,
-                          unsigned char *pInitVector);
-static unsigned char generateAuthData(unsigned char c, unsigned char *pIv, unsigned char *pData, unsigned char f, unsigned char lm);
+static void halAesEncrypt(uint8_t mode, uint8_t *pDataIn, uint16_t length, uint8_t *pDataOut,
+                          uint8_t *pInitVector);
+static void halAesDecrypt(uint8_t mode, uint8_t *pDataIn, uint16_t length, uint8_t *pDataOut,
+                          uint8_t *pInitVector);
+static uint8_t generateAuthData(uint8_t c, uint8_t *pIv, uint8_t *pData, uint8_t f, uint8_t lm);
 
 
 
@@ -80,7 +81,7 @@ static unsigned char generateAuthData(unsigned char c, unsigned char *pIv, unsig
 /***********************************************************************************
 * GLOBAL FUNCTIONS
 */
-extern void halRfAppendTxBuf(unsigned char* pData, unsigned char length);
+extern void halRfAppendTxBuf(uint8_t* pData, uint8_t length);
 
 
 /***********************************************************************************
@@ -92,9 +93,9 @@ extern void halRfAppendTxBuf(unsigned char* pData, unsigned char length);
 *
 * @return  none
 */
-void halRfSecurityInit(unsigned char* pKey, unsigned char* pNonceRx, unsigned char* pNonceTx)
+void halRfSecurityInit(uint8_t* pKey, uint8_t* pNonceRx, uint8_t* pNonceTx)
 {
-    unsigned char i;
+    uint8_t i;
 
     AES_SET_OPERATION(AES_LOAD_KEY);
 
@@ -118,18 +119,18 @@ void halRfSecurityInit(unsigned char* pKey, unsigned char* pNonceRx, unsigned ch
 *
 * @brief   Encrypt and authenticate plaintext then fill TX buffer
 *
-* @param   unsigned char* data - data buffer. This must be allocated by caller.
-*          unsigned char length - number of bytes
-*          unsigned char c - number of bytes to encrypt
-*          unsigned char f - number of bytes to authenticate
-*          unsigned char m - integrity code (m=1,2,3 gives lenght of integrity
+* @param   uint8_t* data - data buffer. This must be allocated by caller.
+*          uint8_t length - number of bytes
+*          uint8_t c - number of bytes to encrypt
+*          uint8_t f - number of bytes to authenticate
+*          uint8_t m - integrity code (m=1,2,3 gives lenght of integrity
 *                   field l(m)= 4,8,16)
 *
 * @return  none
 */
-void halRfWriteTxBufSecure(unsigned char* pPkt, unsigned char length, unsigned char c, unsigned char f, unsigned char m)
+void halRfWriteTxBufSecure(uint8_t* pPkt, uint8_t length, uint8_t c, uint8_t f, uint8_t m)
 {
-    unsigned char i,lm;
+    uint8_t i,lm;
 
     // Generate B(i) vector
     memset(buf,0,sizeof(buf));
@@ -167,18 +168,18 @@ void halRfWriteTxBufSecure(unsigned char* pPkt, unsigned char length, unsigned c
 * @brief   Decrypts and reverse authenticates with CCM then reads out received
 *          frame
 *
-* @param   usigned char* pPkt - data buffer. This must be allocated by caller.
-*          usigned char length - number of bytes
-*          usigned char encrLength - number of bytes to decrypt
-*          usigned char authLength - number of bytes to reverse authenticate
-*          unsigned char m - ets length of integrity code (m=1,2,3 gives lenght of integrity
+* @param   uint8_t* pPkt - data buffer. This must be allocated by caller.
+*          uint8_t length - number of bytes
+*          uint8_t encrLength - number of bytes to decrypt
+*          uint8_t authLength - number of bytes to reverse authenticate
+*          uuint8_t m - ets length of integrity code (m=1,2,3 gives lenght of integrity
 *                   field 4,8,16)
 *
 * @return  SUCCESS or FAILED
 */
-unsigned char halRfReadRxBufSecure(unsigned char* data, unsigned char length, unsigned char c, unsigned char f, unsigned char m)
+uint8_t halRfReadRxBufSecure(uint8_t* data, uint8_t length, uint8_t c, uint8_t f, uint8_t m)
 {
-    unsigned char lm,l,i;
+    uint8_t lm,l,i;
 
     // Get received packet
     halRfReadRxBuf(data,length);
@@ -238,12 +239,12 @@ unsigned char halRfReadRxBufSecure(unsigned char* data, unsigned char length, un
 */
 void halRfIncNonceTx(void)
 {
-    unsigned int *pCount;
+    uint32_t *pCount;
 
-    pCount= (unsigned int*)&nonceTx[9];
-    utilReverseBuf((unsigned char*)pCount,4);
+    pCount= (uint32_t*)&nonceTx[9];
+    utilReverseBuf((uint8_t*)pCount,4);
     (*pCount)++;
-    utilReverseBuf((unsigned char*)pCount,4);
+    utilReverseBuf((uint8_t*)pCount,4);
 }
 
 
@@ -254,9 +255,9 @@ void halRfIncNonceTx(void)
 */
 
 
-static void halAesLoadBlock(unsigned char* pData, unsigned char op)
+static void halAesLoadBlock(uint8_t* pData, uint8_t op)
 {
-   unsigned char i;
+   uint8_t i;
 
    // Set operation
    AES_SET_OPERATION(op);
@@ -273,13 +274,13 @@ static void halAesLoadBlock(unsigned char* pData, unsigned char op)
 
 
 
-static void halAesOperation(unsigned char oper,unsigned char *pDataIn, unsigned short length, unsigned char *pDataOut, unsigned char *pInitVector)
+static void halAesOperation(uint8_t oper,uint8_t *pDataIn, uint16_t length, uint8_t *pDataOut, uint8_t *pInitVector)
 {
-   unsigned short i;
-   unsigned char j, k;
-   unsigned char mode;
-   unsigned short nbrOfBlocks;
-   unsigned short convertedBlock;
+   uint16_t i;
+   uint8_t j, k;
+   uint8_t mode;
+   uint16_t nbrOfBlocks;
+   uint16_t convertedBlock;
 
    nbrOfBlocks = length / 0x10;
 
@@ -357,14 +358,14 @@ static void halAesOperation(unsigned char oper,unsigned char *pDataIn, unsigned 
    }
 }
 
-static void halAesEncrypt(unsigned char mode, unsigned char *pDataIn, unsigned short length, unsigned char *pDataOut, unsigned char *pInitVector)
+static void halAesEncrypt(uint8_t mode, uint8_t *pDataIn, uint16_t length, uint8_t *pDataOut, uint8_t *pInitVector)
 {
     AES_SET_MODE(mode);
     halAesOperation(AES_ENCRYPT,pDataIn,length,pDataOut,pInitVector);
 }
 
 
-static void halAesDecrypt(unsigned char mode, unsigned char *pDataIn, unsigned short length, unsigned char *pDataOut, unsigned char *pInitVector)
+static void halAesDecrypt(uint8_t mode, uint8_t *pDataIn, uint16_t length, uint8_t *pDataOut, uint8_t *pInitVector)
 {
     AES_SET_MODE(mode);
     halAesOperation(AES_DECRYPT,pDataIn,length,pDataOut,pInitVector);
@@ -372,9 +373,9 @@ static void halAesDecrypt(unsigned char mode, unsigned char *pDataIn, unsigned s
 
 
 
-static unsigned char generateAuthData(unsigned char c, unsigned char *pIv, unsigned char *pData, unsigned char f, unsigned char lm)
+static uint8_t generateAuthData(uint8_t c, uint8_t *pIv, uint8_t *pData, uint8_t f, uint8_t lm)
 {
-    unsigned char i,j,l;
+    uint8_t i,j,l;
 
     // Prepare input for CBC-MAC, B0, Bi.... Bn
     memcpy(buf,pIv,16);             // B0

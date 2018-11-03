@@ -19,6 +19,6 @@
 #define UART0_CONF_WITH_INPUT	1
 
 // Definition for RF
-#define SECURITY_CCM			1
+//#define SECURITY_CCM
 
 #endif /* HAL_COMMON_CONFIG_H_ */

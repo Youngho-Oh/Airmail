@@ -11,17 +11,22 @@
 #include "hal/int/hal_int.h"
 #include "hal/hal_mcu.h"            // Using halMcuWaitUs()
 
-#include "hal_rf.h"
+#include "rf/hal_rf.h"
 #ifdef SECURITY_CCM
 #include "hal_rf_security.h"
 #endif
 
-#include "basic_rf.h"
+#include "rf/basic_rf.h"
 #ifdef SECURITY_CCM
 #include "basic_rf_security.h"
 #endif
 
 #include "hal/util.h"               // Using min()
+
+#include "hal/common.h"
+#include "rf/rf_config.h"
+#include "hal/bool.h"
+//#include "string.h"
 
 /***********************************************************************************
 * CONSTANTS AND DEFINES
@@ -84,38 +89,38 @@
 */
 // The receive struct
 typedef struct {
-    unsigned char seqNumber;
-    unsigned short srcAddr;
-    unsigned short srcPanId;
-    char length;
-    unsigned char* pPayload;
-    unsigned char ackRequest;
-    char rssi;
-    volatile unsigned char isReady;
-    unsigned char status;
+    uint8_t seqNumber;
+    uint16_t srcAddr;
+    uint16_t srcPanId;
+    int8_t length;
+    uint8_t* pPayload;
+    uint8_t ackRequest;
+    int8_t rssi;
+    volatile uint8_t isReady;
+    uint8_t status;
 } basicRfRxInfo_t;
 
 // Tx state
 typedef struct {
-    unsigned char txSeqNumber;
-    volatile unsigned char ackReceived;
-    unsigned char receiveOn;
-    unsigned int frameCounter;
+    uint8_t txSeqNumber;
+    volatile uint8_t ackReceived;
+    uint8_t receiveOn;
+    uint32_t frameCounter;
 } basicRfTxState_t;
 
 
 // Basic RF packet header (IEEE 802.15.4)
 typedef struct {
-    unsigned char   packetLength;
-    unsigned char   fcf0;           // Frame control field LSB
-    unsigned char   fcf1;           // Frame control field MSB
-    unsigned char   seqNumber;
-    unsigned short  panId;
-    unsigned short  destAddr;
-    unsigned short  srcAddr;
+    uint8_t   packetLength;
+    uint8_t   fcf0;           // Frame control field LSB
+    uint8_t   fcf1;           // Frame control field MSB
+    uint8_t   seqNumber;
+    uint16_t  panId;
+    uint16_t  destAddr;
+    uint16_t  srcAddr;
     #ifdef SECURITY_CCM
-    unsigned char   securityControl;
-    unsigned char  frameCounter[4];
+    uint8_t   securityControl;
+    uint8_t  frameCounter[4];
     #endif
 } basicRfPktHdr_t;
 
@@ -127,8 +132,8 @@ static basicRfRxInfo_t  rxi=      { 0xFF }; // Make sure sequence numbers are
 basicRfTxState_t txState=  { 0x00 }; // initialised and distinct.
 
 static basicRfCfg_t* pConfig;
-static unsigned char txMpdu[BASIC_RF_MAX_PAYLOAD_SIZE+BASIC_RF_PACKET_OVERHEAD_SIZE+1];
-static unsigned char rxMpdu[128];
+static uint8_t txMpdu[BASIC_RF_MAX_PAYLOAD_SIZE+BASIC_RF_PACKET_OVERHEAD_SIZE+1];
+static uint8_t rxMpdu[128];
 
 /***********************************************************************************
 * GLOBAL VARIABLES
@@ -149,12 +154,12 @@ static unsigned char rxMpdu[128];
 *              destAddr - destination short address
 *              payloadLength - length of higher layer payload
 *
-* @return      unsigned char - length of header
+* @return      uint8_t - length of header
 */
-static unsigned char basicRfBuildHeader(unsigned char* buffer, unsigned short destAddr, unsigned char payloadLength)
+static uint8_t basicRfBuildHeader(uint8_t* buffer, uint16_t destAddr, uint8_t payloadLength)
 {
     basicRfPktHdr_t *pHdr;
-    unsigned short fcf;
+    uint16_t fcf;
 
     pHdr= (basicRfPktHdr_t*)buffer;
 
@@ -177,10 +182,10 @@ static unsigned char basicRfBuildHeader(unsigned char* buffer, unsigned short de
     pHdr->packetLength += BASIC_RF_AUX_HDR_LENGTH;
 
     pHdr->securityControl= SECURITY_CONTROL;
-    pHdr->frameCounter[0]=   LO_UINT16(LO_UINT32(txState.frameCounter));
-    pHdr->frameCounter[1]=   HI_UINT16(LO_UINT32(txState.frameCounter));
-    pHdr->frameCounter[2]=   LO_UINT16(HI_UINT32(txState.frameCounter));
-    pHdr->frameCounter[3]=   HI_UINT16(HI_UINT32(txState.frameCounter));
+    pHdr->frameCounter[0]=   LO_UINT16_t(LO_Uint32_t(txState.frameCounter));
+    pHdr->frameCounter[1]=   HI_UINT16(LO_Uint32_t(txState.frameCounter));
+    pHdr->frameCounter[2]=   LO_UINT16_t(HI_Uint32_t(txState.frameCounter));
+    pHdr->frameCounter[3]=   HI_UINT16(HI_Uint32_t(txState.frameCounter));
 
     #endif
 
@@ -203,11 +208,11 @@ static unsigned char basicRfBuildHeader(unsigned char* buffer, unsigned short de
 *              pPayload - pointer to buffer with payload
 *              payloadLength - length of payload buffer
 *
-* @return      unsigned char - length of mpdu
+* @return      uint8_t - length of mpdu
 */
-static unsigned char basicRfBuildMpdu(unsigned short destAddr, unsigned char* pPayload, unsigned char payloadLength)
+static uint8_t basicRfBuildMpdu(uint16_t destAddr, uint8_t* pPayload, uint8_t payloadLength)
 {
-    unsigned char hdrLength, n;
+    uint8_t hdrLength, n;
 
     hdrLength = basicRfBuildHeader(txMpdu, destAddr, payloadLength);
 
@@ -234,9 +239,9 @@ static unsigned char basicRfBuildMpdu(unsigned short destAddr, unsigned char* pP
 static void basicRfRxFrmDoneIsr(void)
 {
     basicRfPktHdr_t *pHdr;
-    unsigned char *pStatusWord;
+    uint8_t *pStatusWord;
     #ifdef SECURITY_CCM
-    unsigned char authStatus=0;
+    uint8_t authStatus=0;
     #endif
 
     // Map header to packet buffer
@@ -298,7 +303,7 @@ static void basicRfRxFrmDoneIsr(void)
     	UINT16_NTOH(pHdr->destAddr);
     	UINT16_NTOH(pHdr->srcAddr);
         #ifdef SECURITY_CCM
-        UINT32_NTOH(pHdr->frameCounter);
+        Uint32_t_NTOH(pHdr->frameCounter);
         #endif
 
         rxi.ackRequest = !!(pHdr->fcf0 & BASIC_RF_FCF_ACK_BM_L);
@@ -329,7 +334,7 @@ static void basicRfRxFrmDoneIsr(void)
             }
             #else
             if ( ((pHdr->fcf0 & (BASIC_RF_FCF_BM_L)) == BASIC_RF_FCF_NOACK_L) ) {
-                rxi.isReady = TRUE;
+                rxi.isReady = true;
             }              
             #endif
         }
@@ -360,7 +365,7 @@ static void basicRfRxFrmDoneIsr(void)
 *
 * @return      none
 */
-unsigned char basicRfInit(basicRfCfg_t* pRfConfig)
+uint8_t basicRfInit(basicRfCfg_t* pRfConfig)
 {
     if (halRfInit()==FAILED)
         return FAILED;
@@ -409,10 +414,10 @@ unsigned char basicRfInit(basicRfCfg_t* pRfConfig)
 *
 * @return      basicRFStatus_t - SUCCESS or FAILED
 */
-unsigned char basicRfSendPacket(unsigned short destAddr, unsigned char* pPayload, unsigned char length)
+uint8_t basicRfSendPacket(uint16_t destAddr, uint8_t* pPayload, uint8_t length)
 {
-    unsigned char mpduLength;
-    unsigned char status;
+    uint8_t mpduLength;
+    uint8_t status;
 
     // Turn on receiver if its not on
 //    if(!txState.receiveOn) {
@@ -485,9 +490,9 @@ unsigned char basicRfSendPacket(unsigned short destAddr, unsigned char* pPayload
 *
 * @param       none
 *
-* @return      unsigned char - TRUE if a packet is ready to be read by higher layer
+* @return      uint8_t - true if a packet is ready to be read by higher layer
 */
-unsigned char basicRfPacketIsReady(void)
+uint8_t basicRfPacketIsReady(void)
 {
     return rxi.isReady;
 }
@@ -504,9 +509,9 @@ unsigned char basicRfPacketIsReady(void)
 *              rxi - file scope variable holding the information of the last
 *                    incoming packet
 *
-* @return      unsigned char - number of bytes actually copied into buffer
+* @return      uint8_t - number of bytes actually copied into buffer
 */
-unsigned char basicRfReceive(unsigned char* pRxData, unsigned char len, short* pRssi)
+uint8_t basicRfReceive(uint8_t* pRxData, uint8_t len, int16_t* pRssi)
 {
     // Accessing shared variables -> this is a critical region
     // Critical region start
@@ -535,9 +540,9 @@ unsigned char basicRfReceive(unsigned char* pRxData, unsigned char len, short* p
 *
 * @param       none
 
-* @return      char - RSSI value
+* @return      int8_t - RSSI value
 */
-char basicRfGetRssi(void)
+int8_t basicRfGetRssi(void)
 {
     if(rxi.rssi < 128){
         return rxi.rssi - halRfGetRssiOffset();

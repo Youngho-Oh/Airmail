@@ -13,8 +13,9 @@
 /***********************************************************************************
 * INCLUDES
 */
-#include "hal/hal_clock.h"
 #include "hal/common.h"
+#include "rf/rf_config.h"
+
 
 /***********************************************************************************
 * TYPEDEFS
@@ -92,10 +93,10 @@
 #define HAL_PA_LNA_INIT()
 
 // Select CC2591 RX high gain mode 
-#define HAL_PA_LNA_RX_HGM() st( unsigned char i; P0_7 = 1; for (i=0; i<8; i++) asm("NOP"); )
+#define HAL_PA_LNA_RX_HGM() st( uint8_t i; P0_7 = 1; for (i=0; i<8; i++) asm("NOP"); )
 
 // Select CC2591 RX low gain mode
-#define HAL_PA_LNA_RX_LGM() st( unsigned char i; P0_7 = 0; for (i=0; i<8; i++) asm("NOP"); )
+#define HAL_PA_LNA_RX_LGM() st( uint8_t i; P0_7 = 0; for (i=0; i<8; i++) asm("NOP"); )
 
 // TX power lookup index
 #define HAL_RF_TXPOWER_0_DBM          0
@@ -129,21 +130,21 @@
 */
 
 // Generic RF interface
-unsigned char halRfInit(void);
-unsigned char halRfSetTxPower(unsigned char power);
-unsigned char halRfTransmit(void);
-void  halRfSetGain(unsigned char gainMode);     // With CC2590/91 only
+uint8_t halRfInit(void);
+uint8_t halRfSetTxPower(uint8_t power);
+uint8_t halRfTransmit(void);
+void  halRfSetGain(uint8_t gainMode);     // With CC2590/91 only
 
-unsigned char halRfGetChipId(void);
-unsigned char halRfGetChipVer(void);
-unsigned char halRfGetRandomByte(void);
-unsigned char halRfGetRssiOffset(void);
+uint8_t halRfGetChipId(void);
+uint8_t halRfGetChipVer(void);
+uint8_t halRfGetRandomByte(void);
+uint8_t halRfGetRssiOffset(void);
 
-void  halRfWriteTxBuf(unsigned char* pData, unsigned char length);
-void  halRfReadRxBuf(unsigned char* pData, unsigned char length);
+void  halRfWriteTxBuf(uint8_t* pData, uint8_t length);
+void  halRfReadRxBuf(uint8_t* pData, uint8_t length);
 void  halRfWaitTransceiverReady(void);
-unsigned char halRfReadMemory(unsigned short addr, unsigned char* pData, unsigned char length);
-unsigned char halRfWriteMemory(unsigned short addr, unsigned char* pData, unsigned char length);
+uint8_t halRfReadMemory(uint16_t addr, uint8_t* pData, uint8_t length);
+uint8_t halRfWriteMemory(uint16_t addr, uint8_t* pData, uint8_t length);
 
 void  halRfReceiveOn(void);
 void  halRfReceiveOff(void);
@@ -154,10 +155,16 @@ void  halRfRxInterruptConfig(ISR_FUNC_PTR pfISR);
 
 
 // IEEE 802.15.4 specific interface
-void  halRfSetChannel(unsigned char channel);
-void  halRfSetShortAddr(unsigned short shortAddr);
-void  halRfSetPanId(unsigned short PanId);
+void  halRfSetChannel(uint8_t channel);
+void  halRfSetShortAddr(uint16_t shortAddr);
+void  halRfSetPanId(uint16_t PanId);
 
+
+#ifndef MRFI
+extern ISR_FUNC_PTR pfISR;
+
+void rf_isr(void) __interrupt(RF_VECTOR);
+#endif
 
 #endif
 

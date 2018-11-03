@@ -1,24 +1,59 @@
-/******************************************************************************
-    Filename: basic_rf_security.h
-	Description : Basic RF security library header file
-******************************************************************************/
+/***********************************************************************************
 
-#ifndef HAL_BASIC_RF_SECURITY_H_
-#define HAL_BASIC_RF_SECURITY_H_
+  Filename:     util_buffer.h
 
-/*******************************************************************************
- * INCLUDES
- */
-#include "basic_rf.h"
+  Description:  Ringbuffer interface
 
-/*******************************************************************************
- * CONSTANTS AND DEFINEDS
- */
+***********************************************************************************/
+#ifndef UTIL_BUFFER_H
+#define UTIL_BUFFER_H
 
-/*******************************************************************************
- * GLOBAL FUNCTIONS
- */
-void basicRfSecurityInit(basicRfCfg_t * pConfig);
+/***********************************************************************************
+* INCLUDES
+*/
+#include "rf/rf_config.h"
+
+/***********************************************************************************
+* CONSTANTS AND DEFINES
+*/
+#ifndef BUF_SIZE
+#ifdef WIN32
+#define BUF_SIZE	256
+#else
+#define BUF_SIZE    64
+#endif
+#endif
+
+#if (BUF_SIZE > 256)
+#error "Buffer size too big"
+#endif
+
+/***********************************************************************************
+* TYPEDEFS
+*/
+typedef struct {
+    volatile uint8_t pData[BUF_SIZE];
+    volatile uint8_t nBytes;
+    volatile uint8_t iHead;
+    volatile uint8_t iTail;
+} ringBuf_t;
+
+/***********************************************************************************
+* MACROS
+*/
+#define bufFlush(pBuf)  bufInit(pBuf)
+
+/***********************************************************************************
+* GLOBAL FUNCTIONS
+*/
+void  bufInit(ringBuf_t *pBuf);
+uint8_t bufPut(ringBuf_t *pBuf, const uint8_t *pData, uint8_t n);
+uint8_t bufGet(ringBuf_t *pBuf, uint8_t *pData, uint8_t n);
+uint8_t bufPeek(ringBuf_t *pBuf, uint8_t *pData, uint8_t nBytes);
+uint8_t bufNumBytes(ringBuf_t *pBuf);
+
+#endif
+
 
 /***********************************************************************************
   Copyright 2007 Texas Instruments Incorporated. All rights reserved.
@@ -37,7 +72,7 @@ void basicRfSecurityInit(basicRfCfg_t * pConfig);
   its documentation for any purpose.
 
   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED 밃S IS� WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+  PROVIDED �AS IS� WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
   INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
   NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
   TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
@@ -51,5 +86,3 @@ void basicRfSecurityInit(basicRfCfg_t * pConfig);
   Should you have any questions regarding your right to use this Software,
   contact Texas Instruments Incorporated at www.TI.com.
 ***********************************************************************************/
-
-#endif /* HAL_BASIC_RF_SECURITY_H_ */

@@ -23,7 +23,7 @@ extern "C"
  * INCLUDES
  */
 
-
+#include "rf/rf_config.h"
 
 /*********************************************************************
  * CONSTANTS
@@ -41,7 +41,7 @@ extern "C"
 /*********************************************************************
  * PUBLIC FUNCTIONS
  */
-char halSampleED(unsigned char channel, unsigned short sampleTime);
+int8_t halSampleED(uint8_t channel, uint16_t sampleTime);
 void halSetRxScanMode(void);
 void halSetRxNormalMode(void);
 

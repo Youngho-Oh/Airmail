@@ -10,11 +10,11 @@
 * INCLUDES
 */
 
-#include "hal_rf_util.h"
-
 #include "hal/common.h"
-#include "hal_rf.h"
 #include "hal/hal_mcu.h"
+#include "rf/hal_rf_util.h"
+#include "rf/hal_rf.h"
+
 
 /*********************************************************************
 * CONSTANTS
@@ -45,14 +45,14 @@
 *
 * @brief      Sample Energy Detect
 *
-* @param      uint8 channel - channel between 11 and 26
-*             uint16 sampleTime - sample time in us
+* @param      uint8_t channel - channel between 11 and 26
+*             uint16_t sampleTime - sample time in us
 *            
-* @return     int8 - sampled RSSI value      
+* @return     int8_t - sampled RSSI value
 */
-char halSampleED(unsigned char channel, unsigned short sampleTime)
+int8_t halSampleED(uint8_t channel, uint16_t sampleTime)
 {
-  char rssi=0;
+  int8_t rssi=0;
   
   // Set channel
   halRfSetChannel(channel);

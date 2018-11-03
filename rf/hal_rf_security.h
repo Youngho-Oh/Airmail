@@ -12,7 +12,7 @@
 /***********************************************************************************
 * INCLUDES
 */
-#include "hal/common.h"
+#include "rf/rf_config.h"
 
 /***********************************************************************************
 * TYPEDEFS
@@ -34,9 +34,9 @@
 */
 
 // CCM security interface, IEEE 802.15.4
-void  halRfSecurityInit(unsigned char* key, unsigned char* nonceRx, unsigned char* nonceTx);
-unsigned char halRfReadRxBufSecure(unsigned char* pData, unsigned char length, unsigned char encrLength, unsigned char authLength, unsigned char m);
-void  halRfWriteTxBufSecure(unsigned char* pData, unsigned char length, unsigned char encrLength, unsigned char authLength, unsigned char m);
+void  halRfSecurityInit(uint8_t* key, uint8_t* nonceRx, uint8_t* nonceTx);
+uint8_t halRfReadRxBufSecure(uint8_t* pData, uint8_t length, uint8_t encrLength, uint8_t authLength, uint8_t m);
+void  halRfWriteTxBufSecure(uint8_t* pData, uint8_t length, uint8_t encrLength, uint8_t authLength, uint8_t m);
 void  halRfIncNonceTx(void);
 
 

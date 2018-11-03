@@ -63,7 +63,7 @@
 #ifndef __MEMB_H__
 #define __MEMB_H__
 
-#include "sys/cc.h"
+//#include "sys/cc.h"
 
 /**
  * Declare a memory block.

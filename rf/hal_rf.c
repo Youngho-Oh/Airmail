@@ -9,12 +9,13 @@
 /***********************************************************************************
 * INCLUDES
 */
-#include "hal_rf.h"
-
 #include "hal/common.h"
-#include "hal/util.h"
 #include "hal/bool.h"
+#include "hal/hal_mcu.h"
 #include "hal/int/hal_int.h"
+#include "rf/hal_rf.h"
+#include "hal/util.h"
+
 
 /***********************************************************************************
 * CONSTANTS AND DEFINES
@@ -52,9 +53,9 @@ const menu_t powerMenu =
 * LOCAL DATA
 */
 #ifndef MRFI
-static ISR_FUNC_PTR pfISR= NULL;
+ISR_FUNC_PTR pfISR = NULL;
 #endif
-static unsigned char rssiOffset = RSSI_OFFSET;
+static uint8_t rssiOffset = RSSI_OFFSET;
 
 /***********************************************************************************
 * LOCAL FUNCTIONS
@@ -75,7 +76,7 @@ static void halPaLnaInit(void);
 *
 * @return  SUCCESS always (for interface compatibility)
 */
-unsigned char halRfInit(void)
+uint8_t halRfInit(void)
 {
     // Enable auto ack and auto crc
     FRMCTRL0 |= (AUTO_ACK | AUTO_CRC);
@@ -105,9 +106,9 @@ unsigned char halRfInit(void)
 *
 * @param   none
 *
-* @return  unsigned char - result
+* @return  uint8_t - result
 */
-unsigned char halRfGetChipId(void)
+uint8_t halRfGetChipId(void)
 {
     return CHIPID;
 }
@@ -120,9 +121,9 @@ unsigned char halRfGetChipId(void)
 *
 * @param   none
 *
-* @return  unsigned char - result
+* @return  uint8_t - result
 */
-unsigned char halRfGetChipVer(void)
+uint8_t halRfGetChipVer(void)
 {
     // return major revision (4 upper bits)
     return CHVER>>4;
@@ -135,9 +136,9 @@ unsigned char halRfGetChipVer(void)
 *
 * @param   none
 *
-* @return  unsigned char - random byte
+* @return  uint8_t - random byte
 */
-unsigned char halRfGetRandomByte(void)
+uint8_t halRfGetRandomByte(void)
 {
     // Not yet implemented
 //    HAL_ASSERT(false);
@@ -152,9 +153,9 @@ unsigned char halRfGetRandomByte(void)
 *
 * @param   none
 *
-* @return  unsigned char - RSSI offset
+* @return  uint8_t - RSSI offset
 */
-unsigned char halRfGetRssiOffset(void)
+uint8_t halRfGetRssiOffset(void)
 {
     return rssiOffset;
 }
@@ -169,7 +170,7 @@ unsigned char halRfGetRssiOffset(void)
 *
 * @return  none
 */
-void halRfSetChannel(unsigned char channel)
+void halRfSetChannel(uint8_t channel)
 {
     FREQCTRL = (MIN_CHANNEL + (channel - MIN_CHANNEL) * CHANNEL_SPACING);
 }
@@ -184,10 +185,10 @@ void halRfSetChannel(unsigned char channel)
 *
 * @return  none
 */
-void halRfSetShortAddr(unsigned short shortAddr)
+void halRfSetShortAddr(uint16_t shortAddr)
 {
-	SHORTADDRL = LO_UINT16(shortAddr);
-	SHORTADDRH = HI_UINT16(shortAddr);
+	SHORTADDRH = LO_UINT16(shortAddr);
+	SHORTADDRL = HI_UINT16(shortAddr);
 }
 
 
@@ -200,10 +201,10 @@ void halRfSetShortAddr(unsigned short shortAddr)
 *
 * @return  none
 */
-void halRfSetPanId(unsigned short panId)
+void halRfSetPanId(uint16_t panId)
 {
-	PANIDL = LO_UINT16(panId);
-	PANIDH = HI_UINT16(panId);
+	PANIDH = LO_UINT16(panId);
+	PANIDL = HI_UINT16(panId);
 }
 
 
@@ -212,14 +213,14 @@ void halRfSetPanId(unsigned short panId)
 *
 * @brief   Set TX output power
 *
-* @param   unsigned char power - power level: TXPOWER_MIN_4_DBM, TXPOWER_0_DBM,
+* @param   uint8_t power - power level: TXPOWER_MIN_4_DBM, TXPOWER_0_DBM,
 *                        TXPOWER_4_DBM
 *
-* @return  unsigned char - SUCCESS or FAILED
+* @return  uint8_t - SUCCESS or FAILED
 */
-unsigned char halRfSetTxPower(unsigned char power)
+uint8_t halRfSetTxPower(uint8_t power)
 {
-    unsigned char n;
+    uint8_t n;
 
     switch(power)
     {
@@ -250,11 +251,11 @@ unsigned char halRfSetTxPower(unsigned char power)
 *
 * @brief   Set gain mode - only applicable for units with CC2590/91.
 *
-* @param   unsigned char - gain mode
+* @param   uint8_t - gain mode
 *
 * @return  none
 */
-void halRfSetGain(unsigned char gainMode)
+void halRfSetGain(uint8_t gainMode)
 {
     if (gainMode==HAL_RF_GAIN_LOW) {
         HAL_PA_LNA_RX_LGM();
@@ -270,16 +271,16 @@ void halRfSetGain(unsigned char gainMode)
 *
 * @brief   Write to TX buffer
 *
-* @param   unsigned char* pData - buffer to write
-*          unsigned char length - number of bytes
+* @param   uint8_t* pData - buffer to write
+*          uint8_t length - number of bytes
 *
 * @return  none
 */
-void halRfWriteTxBuf(unsigned char* pData, unsigned char length)
+void halRfWriteTxBuf(uint8_t* pData, uint8_t length)
 {
-    unsigned char i;
+    uint8_t i;
 
-    ISFLUSHTX();         	 // Making sure that the TX FIFO is empty.
+    ISFLUSHTX();          // Making sure that the TX FIFO is empty.
 
     RFIRQF1 = ~IRQ_TXDONE;   // Clear TX done interrupt
 
@@ -295,14 +296,14 @@ void halRfWriteTxBuf(unsigned char* pData, unsigned char length)
 *
 * @brief   Write to TX buffer
 *
-* @param   unsigned char* pData - buffer to write
-*          unsigned char length - number of bytes
+* @param   uint8_t* pData - buffer to write
+*          uint8_t length - number of bytes
 *
 * @return  none
 */
-void halRfAppendTxBuf(unsigned char* pData, unsigned char length)
+void halRfAppendTxBuf(uint8_t* pData, uint8_t length)
 {
-    unsigned char i;
+    uint8_t i;
 
     // Insert data
     for(i=0;i<length;i++){
@@ -316,12 +317,12 @@ void halRfAppendTxBuf(unsigned char* pData, unsigned char length)
 *
 * @brief   Read RX buffer
 *
-* @param   unsigned char* pData - data buffer. This must be allocated by caller.
-*          unsigned char length - number of bytes
+* @param   uint8_t* pData - data buffer. This must be allocated by caller.
+*          uint8_t length - number of bytes
 *
 * @return  none
 */
-void halRfReadRxBuf(unsigned char* pData, unsigned char length)
+void halRfReadRxBuf(uint8_t* pData, uint8_t length)
 {
     // Read data
     while (length>0) {
@@ -336,19 +337,14 @@ void halRfReadRxBuf(unsigned char* pData, unsigned char length)
 *
 * @brief   Read RF device memory
 *
-* @param   unsigned short addr - memory address
-*          unsigned char* pData - data buffer. This must be allocated by caller.
-*          unsigned char length - number of bytes
+* @param   uint16_t addr - memory address
+*          uint8_t* pData - data buffer. This must be allocated by caller.
+*          uint8_t length - number of bytes
 *
 * @return  Number of bytes read
 */
-unsigned char halRfReadMemory(unsigned short addr, unsigned char* pData, unsigned char length)
+uint8_t halRfReadMemory(uint16_t addr, uint8_t* pData, uint8_t length)
 {
-	//WOW TODO
-	(void)addr;
-	(void)pData;
-	(void)length;
-
     return 0;
 }
 
@@ -358,13 +354,13 @@ unsigned char halRfReadMemory(unsigned short addr, unsigned char* pData, unsigne
 *
 * @brief   Write RF device memory
 *
-* @param   unsigned short addr - memory address
-*          unsigned char* pData - data buffer. This must be allocated by caller.
-*          unsigned char length - number of bytes
+* @param   uint16_t addr - memory address
+*          uint8_t* pData - data buffer. This must be allocated by caller.
+*          uint8_t length - number of bytes
 *
 * @return  Number of bytes written
 */
-unsigned char halRfWriteMemory(unsigned short addr, unsigned char* pData, unsigned char length)
+uint8_t halRfWriteMemory(uint16_t addr, uint8_t* pData, uint8_t length)
 {
     return 0;
 }
@@ -376,11 +372,11 @@ unsigned char halRfWriteMemory(unsigned short addr, unsigned char* pData, unsign
 *
 * @param   none
 *
-* @return  unsigned char - SUCCESS or FAILED
+* @return  uint8_t - SUCCESS or FAILED
 */
-unsigned char halRfTransmit(void)
+uint8_t halRfTransmit(void)
 {
-    unsigned char status;
+    uint8_t status;
 
     ISTXON(); // Sending
 
@@ -474,7 +470,7 @@ void halRfEnableRxInterrupt(void)
 */
 void halRfRxInterruptConfig(ISR_FUNC_PTR pf)
 {
-    unsigned char x;
+    uint8_t x;
     HAL_INT_LOCK(x);
     pfISR= pf;
     HAL_INT_UNLOCK(x);
@@ -497,34 +493,6 @@ void halRfWaitTransceiverReady(void)
     while (FSMSTAT1 & (BV(1) | BV(5) ));
 }
 
-#ifndef MRFI
-/************************************************************************************
-* @fn          rfIsr
-*
-* @brief       Interrupt service routine that handles RFPKTDONE interrupt.
-*
-* @param       none
-*
-* @return      none
-*/
-void rf_isr(void) __interrupt(RF_VECTOR)
-{
-    unsigned char x;
-
-    HAL_INT_LOCK(x);
-
-    if( RFIRQF0 & IRQ_RXPKTDONE )
-    {
-        if(pfISR){
-            (*pfISR)();                 // Execute the custom ISR
-        }
-        S1CON= 0;                   // Clear general RF interrupt flag
-        RFIRQF0&= ~IRQ_RXPKTDONE;   // Clear RXPKTDONE interrupt
-    }
-    HAL_INT_UNLOCK(x);
-}
-#endif
-
 /***********************************************************************************
 * LOCAL FUNCTIONS
 */
@@ -535,7 +503,7 @@ static void halPaLnaInit(void)
 {
 #if INCLUDE_PA==2591
     // Initialize CC2591 to RX high gain mode
-    static unsigned char fFirst= TRUE;
+    static uint8_t fFirst= true;
 
     if(fFirst) {
         AGCCTRL1  = 0x15;
@@ -549,7 +517,7 @@ static void halPaLnaInit(void)
     }
 #elif INCLUDE_PA==2592// crazyboy 20150814
     // Initialize CC2592 to RX high gain mode
-    static unsigned char fFirst= TRUE;
+    static uint8_t fFirst= true;
 
     if(fFirst) {
         AGCCTRL1  = 0x15;

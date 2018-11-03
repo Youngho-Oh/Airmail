@@ -1,69 +1,57 @@
 /******************************************************************************
-    Filename: basic_rf_security.c
-	Description : Basic RF security library
+    Filename: adc.c
+
+    These functions/macros simplifies usage of the ADC.
+
 ******************************************************************************/
 
-#include "hal/common.h"
+#include "adc.h"
 
-#ifdef SECURITY_CCM
-
-/*******************************************************************************
- * INCLUDES
- */
-#include "basic_rf_security.h"
-#include "hal_rf_security.h"
-
-/*******************************************************************************
- * CONSTANTS AND DEFINEDS
- */
-#define FLAG_FIELD		0x09
-#define NONCE_SIZE		16
-
-/*******************************************************************************
- * LOCAL VARIABLES
- */
-static unsigned char nonceTx[NONCE_SIZE];
-static unsigned char nonceRx[NONCE_SIZE];
-
-/*******************************************************************************
- * GLOBAL FUNCTIONS
- */
 
 /******************************************************************************
-* @fn  basicRfSecurityInit
+* @fn  adcSampleSingle
 *
-* @brief Initialise key and nonces and write to radio
+* @brief
+*      This function makes the adc sample the given channel at the given
+*      resolution with the given reference.
 *
-* @param  pConfig - file scope variable holding configuration data for
-*                   basic RF
+* @param uint8_t reference
+*          The reference to compare the channel to be sampled.
+*        uint8_t resolution
+*          The resolution to use during the sample (8, 10, 12 or 14 bit)
+*        uint8_t input
+*          The channel to be sampled.
 *
-* @return none
+* @return int16_t
+*          The conversion result
 *
 ******************************************************************************/
-void basicRfSecurityInit(basicRfCfg_t * pConfig)
+int16_t adcSampleSingle(uint8_t reference, uint8_t resolution, uint8_t channel)
 {
-	unsigned char i;
+    int16_t value;
 
-	// Initialize nonce bytes to 0
-	for(i=0;i<NONCE_SIZE;i++)
-	{
-		nonceRx[i] = 0;
-		nonceTx[i] = 0;
-	}
+    ADC_ENABLE_CHANNEL(channel);
 
-	// Set nonce flag field (Byte 0)
-	nonceRx[0] = FLAG_FIELD;
-	nonceTx[0] = FLAG_FIELD;
+    ADCIF = 0;
+    ADC_SINGLE_CONVERSION(reference | resolution | channel);
+    while(!ADCIF);
 
-	// Set byte 7 and 8 of nonce to myAddr
-	nonceTx[8] = (unsigned char)pConfig->myAddr;
-	nonceTx[7] = (unsigned char)(pConfig->myAddr>>8);
+    value  = (ADCH << 8) & 0xff00;
+    value |= ADCL;
 
-	// Set Security mode field of nonces (Byte 13)
-	nonceRx[13] = SECURITY_CONTROL;
-	nonceTx[13] = SECURITY_CONTROL;
+    ADC_DISABLE_CHANNEL(channel);
 
-	halRfSecurityInit(pConfig->securityKey, nonceRx, nonceTx);
+    //  The variable 'value' contains 16 bits where
+    //     bit 15 is a sign bit
+    //     bit [14 .. 0] contain the absolute sample value
+    //     Only the r upper bits are significant, where r is the resolution
+    //     Resolution:
+    //        12   -> [14 .. 3] (bitmask 0x7FF8)
+    //        10   -> [14 .. 5] (bitmask 0x7FE0)
+    //         9   -> [14 .. 6] (bitmask 0x7FC0)
+    //         7   -> [14 .. 8] (bitmask 0x7F00)
+
+    return value;
 }
 
 /***********************************************************************************
@@ -83,7 +71,7 @@ void basicRfSecurityInit(basicRfCfg_t * pConfig)
   its documentation for any purpose.
 
   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED 밃S IS� WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+  PROVIDED �AS IS� WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
   INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
   NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
   TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
@@ -97,5 +85,3 @@ void basicRfSecurityInit(basicRfCfg_t * pConfig)
   Should you have any questions regarding your right to use this Software,
   contact Texas Instruments Incorporated at www.TI.com.
 ***********************************************************************************/
-
-#endif
