@@ -34,10 +34,10 @@
 #define EVENT_RF_LAW_SEND	1
 
 // PER test packet format
-typedef struct {
+/*typedef struct {
     uint8_t size;
     uint8_t data[APP_MAX_PAYLOAD_LENGTH];
-} app_Packet_t;
+} app_Packet_t;*/
 
 extern basicRfCfg_t g_basicRfConfig;
 extern uint16_t g_deviceAddr;

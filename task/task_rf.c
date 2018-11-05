@@ -14,8 +14,13 @@
 
 #include "task_rf.h"
 
+#include "lib/queue.h"
+
 #include "hal/bool.h"
 #include "sys/log.h"
+
+#define RF_QUEUE_TX_BUF_SIZE	3000
+#define RF_QUEUE_RX_BUF_SIZE	100
 
 sche_task task_rf = {0, 0, NULL};
 
@@ -23,6 +28,12 @@ sche_task task_rf = {0, 0, NULL};
 basicRfCfg_t rfValue;
 uint16_t g_deviceAddr;
 uint8_t g_txPower;
+
+static app_Packet_t txPacket;
+static app_Packet_t rxPacket;
+
+uint8_t txPacket_databuf[RF_QUEUE_TX_BUF_SIZE] = {0,};
+uint8_t rxPacket_databuf[RF_QUEUE_RX_BUF_SIZE] = {0,};
 
 unsigned short des_addr = 0;
 unsigned char data_buf[255] = {0,};
@@ -51,6 +62,7 @@ T_ERROR task_rf_event_function(unsigned char cur_task_event)
 	switch(cur_task_event){
 	case EVENT_RF_INIT :
 		_task_rf_event_init( );
+		Queue_Initialize(&txPacket, &rxPacket, txPacket_databuf, rxPacket_databuf, RF_QUEUE_TX_BUF_SIZE, RF_QUEUE_RX_BUF_SIZE);
 		break;
 	case EVENT_RF_LAW_SEND :
 		_task_rf_event_law_send( );
@@ -101,7 +113,22 @@ static T_ERROR _task_rf_event_law_send(void)
 	log_message("RF law data send\r\n",18);
 
 	//TODO : send test
-//	basicRfSendPacket(des_addr, data_buf, 8);
+//	uint8_t rxChar;
+//	uint8_t txPacketSize;
+//
+//    txPacketSize = 0;
+//    do
+//    {
+//        rxChar = UartQueue_Rx_DeQueue();
+//        txPacket.data[txPacketSize++] = rxChar;
+//        if(txPacketSize == APP_MAX_PAYLOAD_LENGTH)
+//        {
+//            break;
+//        }
+//    }while(false == UartQueue_Rx_Is_Empty());
+//
+//    txPacket.size = txPacketSize;
+//    basicRfSendPacket(g_deviceAddr, (uint8*)&txPacket, txPacketSize + 1);
 
 	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 1000);
 
