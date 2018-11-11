@@ -8,28 +8,6 @@
 #ifndef RF_RF_CONFIG_H_
 #define RF_RF_CONFIG_H_
 
-//#include "rf/net/tcpip.h"
-//#include "rf/net/uip.h"
-//#include "net/uip-fw.h"
-//#include "rf/net/uip-fw-drv.h"
-//#include "rf/net/uip_arp.h"
-//#include "rf/net/uiplib.h"
-//#include "rf/net/uip-udp-packet.h"
-//#include "rf/net/simple-udp.h"
-//
-//#if UIP_CONF_IPV6
-//#include "net/uip-icmp6.h"
-//#include "net/uip-ds6.h"
-//#endif /* UIP_CONF_IPV6 */
-//
-//#include "rf/net/resolv.h"
-//
-//#include "rf/net/psock.h"
-//
-//#include "rf/net/rime.h"
-//
-//#include "rf/net/netstack.h"
-
 #define CCIF
 
 #ifndef NULL
@@ -209,6 +187,18 @@ typedef unsigned int  	process_event_t;
 #if !UIP_CONF_ROUTER
 #define UIP_CONF_DS6_AADDR_NBU               1
 #endif
+
+
+/*
+ * configuration about zboss stack in below
+ */
+#define ZB_PLATFORM_8051_SIM
+#define SDCC
+#define ZB_CC25XX
+
+#define ZB_ED_ROLE
+#define ZB_COORDINATOR_ROLE
+//#define ZB_ROUTER_ROLE
 
 
 #endif /* RF_RF_CONFIG_H_ */

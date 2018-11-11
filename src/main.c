@@ -9,6 +9,7 @@
 #include "hal/hal_mcu.h"
 #include "sys/log.h"
 #include "os/wow_os.h"
+#include "rf/zb/hdr/zb_common.h"
 
 // IF YOU WANT TO ADD ISR FUNCTION INTO RST FILE, A PROTOTYPE OF ISR FUNCTION MUST BE PRESENT IN THE MAIN SOURCE FILE
 // YOU CAN SEE BELOW EXAMPLE HOW TO USE
@@ -28,10 +29,12 @@ int main()
 		sys_setting.enable_log = 1;
 	}
 
-	/* Set up wow os */
+	/* Set up */
 	{
 		// Set up kernel clock
 		wow_clock_init();
+		// Set up zigbee stack.
+		zb_init();
 		// Set up task
 		wow_sche_task_init();
 		// start kernel clock
