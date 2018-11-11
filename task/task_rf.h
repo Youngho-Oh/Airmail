@@ -33,6 +33,8 @@
 #define EVENT_RF_INIT		0
 #define EVENT_RF_LAW_SEND	1
 
+//#define COORDINATOR
+
 // PER test packet format
 /*typedef struct {
     uint8_t size;

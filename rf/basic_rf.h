@@ -30,7 +30,7 @@
     2. Call basicRfSendPacket()
 
     Reception:
-    1. Check if a packet is ready to be received by highger layer with
+    1. Check if a packet is ready to be received by higher layer with
     basicRfPacketIsReady()
     2. Call basicRfReceive() to receive the packet by higher layer
 

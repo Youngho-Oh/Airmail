@@ -19,7 +19,7 @@
 #include "hal/bool.h"
 #include "sys/log.h"
 
-#define RF_QUEUE_TX_BUF_SIZE	3000
+#define RF_QUEUE_TX_BUF_SIZE	100
 #define RF_QUEUE_RX_BUF_SIZE	100
 
 sche_task task_rf = {0, 0, NULL};
@@ -35,12 +35,15 @@ static app_Packet_t rxPacket;
 uint8_t txPacket_databuf[RF_QUEUE_TX_BUF_SIZE] = {0,};
 uint8_t rxPacket_databuf[RF_QUEUE_RX_BUF_SIZE] = {0,};
 
+//TODO temporary value
+uint8_t temp_data[RF_QUEUE_TX_BUF_SIZE] = {0,};
+
 unsigned short des_addr = 0;
 unsigned char data_buf[255] = {0,};
 
 static T_ERROR task_rf_event_function(unsigned char cur_task_event);
 static T_ERROR _task_rf_event_init(void);
-static T_ERROR _task_rf_event_law_send(void);
+static T_ERROR _task_rf_event_law_send(uint8_t * sendbuf, uint16_t buf_size);
 
 static void _rf_init_default(basicRfCfg_t * rfconfig);
 static void _rf_init_power(void);
@@ -65,7 +68,8 @@ T_ERROR task_rf_event_function(unsigned char cur_task_event)
 		Queue_Initialize(&txPacket, &rxPacket, txPacket_databuf, rxPacket_databuf, RF_QUEUE_TX_BUF_SIZE, RF_QUEUE_RX_BUF_SIZE);
 		break;
 	case EVENT_RF_LAW_SEND :
-		_task_rf_event_law_send( );
+		//TODO
+		_task_rf_event_law_send(temp_data, 0);
 		break;
 	default :
 		log_message("Undefined event!!!\r\n", 20);
@@ -108,29 +112,16 @@ T_ERROR _task_rf_event_init(void)
 	return OS_OK;
 }
 
-static T_ERROR _task_rf_event_law_send(void)
+static T_ERROR _task_rf_event_law_send(uint8_t * sendbuf, uint16_t buf_size)
 {
 	log_message("RF law data send\r\n",18);
 
-	//TODO : send test
-//	uint8_t rxChar;
-//	uint8_t txPacketSize;
-//
-//    txPacketSize = 0;
-//    do
-//    {
-//        rxChar = UartQueue_Rx_DeQueue();
-//        txPacket.data[txPacketSize++] = rxChar;
-//        if(txPacketSize == APP_MAX_PAYLOAD_LENGTH)
-//        {
-//            break;
-//        }
-//    }while(false == UartQueue_Rx_Is_Empty());
-//
-//    txPacket.size = txPacketSize;
-//    basicRfSendPacket(g_deviceAddr, (uint8*)&txPacket, txPacketSize + 1);
+	if( (sendbuf == NULL) || (buf_size == 0) )
+		return OS_PARAM_ERROR;
 
-	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 1000);
+    basicRfSendPacket(g_deviceAddr, (uint8_t *)sendbuf, buf_size + 1);
+
+	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 5000);
 
 	return OS_OK;
 }
