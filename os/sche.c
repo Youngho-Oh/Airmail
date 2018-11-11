@@ -25,6 +25,7 @@ T_ERROR wow_sche_task_init( )
 {
 	int_task_evt = 0;
 	int_task_sleep = 0;
+
 	running_executed_task = SCHE_UNDEFINED;
 
 	return OS_OK;
@@ -97,6 +98,7 @@ T_ERROR wow_sche_task_evt_disable(unsigned int task, unsigned char event)
 
 	task_list[task]->bit_event &= ~(0x01 << event);
 	if(task_list[task]->bit_event == 0)
+
 		int_task_evt &= ~(0x01 << task);
 
 	return OS_OK;
