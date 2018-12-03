@@ -144,7 +144,7 @@ zb_void_t *zb_buf_initial_alloc(zb_buf_t *zbbuf, zb_uint8_t size);
    @param ptr   - (out) pointer to the new buffer begin
  */
 #define ZB_BUF_ALLOC_LEFT(zbbuf, size, ptr) (ptr) = zb_buf_smart_alloc_left((zbbuf), (size))
-zb_void_t *zb_buf_smart_alloc_left(zb_buf_t *zbbuf, zb_uint8_t size) ZB_SDCC_REENTRANT;
+zb_void_t *zb_buf_smart_alloc_left(zb_buf_t *zbbuf, zb_uint8_t size);
 
 /**
    Allocate space at buffer end
@@ -154,7 +154,7 @@ zb_void_t *zb_buf_smart_alloc_left(zb_buf_t *zbbuf, zb_uint8_t size) ZB_SDCC_REE
    @param ptr   - (out) pointer to the space allocated
  */
 #define ZB_BUF_ALLOC_RIGHT(zbbuf, size, ptr) (ptr) = zb_buf_smart_alloc_right((zbbuf), (size))
-zb_void_t *zb_buf_smart_alloc_right(zb_buf_t *zbbuf, zb_uint8_t size) ZB_SDCC_REENTRANT;
+zb_void_t *zb_buf_smart_alloc_right(zb_buf_t *zbbuf, zb_uint8_t size);
 
 /**
    Cut space at buffer begin
@@ -215,7 +215,7 @@ zb_void_t *zb_get_buf_tail(zb_buf_t *zbbuf, zb_uint8_t size);
    @param size  - data size
 
  */
-void zb_buf_assign_param(zb_buf_t *zbbuf, zb_uint8_t *param, zb_uint8_t size) ZB_SDCC_REENTRANT;
+void zb_buf_assign_param(zb_buf_t *zbbuf, zb_uint8_t *param, zb_uint8_t size);
 
 #define ZB_SET_BUF_PARAM(zbbuf, param, type) ( *((type *)ZB_GET_BUF_TAIL(zbbuf, sizeof(type))) = (param) )
 #define ZB_SET_BUF_PARAM_PTR(zbbuf, param, type) ( ZB_MEMCPY((type *)ZB_GET_BUF_TAIL(zbbuf, sizeof(type)), (param), sizeof(type)) )

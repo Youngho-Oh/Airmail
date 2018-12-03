@@ -2267,7 +2267,7 @@ void zb_mcps_data_request(zb_uint8_t param) ZB_CALLBACK;
 
    Other fields got from MAC nsdu by macros
  */
-void zb_mcps_data_indication(zb_uint8_t param) ZB_CALLBACK;
+void zb_mcps_data_indication(zb_uint8_t param);
 
 /**
    MCPS-DATA.confirm primitive
@@ -2282,7 +2282,7 @@ void zb_mcps_data_indication(zb_uint8_t param) ZB_CALLBACK;
    Other fields got from MAC nsdu by macros
 
  */
-void zb_mcps_data_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mcps_data_confirm(zb_uint8_t param);
 
 zb_ret_t pending_queue_is_empty();
 
@@ -2304,7 +2304,7 @@ zb_mlme_reset_request_t;
 
    @param param - parameter (packet buffer), @see zb_mlme_reset_request_t is on its tail
  */
-void zb_mlme_reset_request (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_reset_request (zb_uint8_t param);
 
 /**
    MLME-RESET.confirm
@@ -2399,7 +2399,7 @@ void zb_mlme_associate_response (zb_uint8_t param) ZB_CALLBACK;
 
   @param param - reference to buffer, contains packet (MAC header + beacon payload + trailes with RSSI
  */
-void zb_mlme_beacon_notify_indication(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_beacon_notify_indication(zb_uint8_t param);
 
 /**
   Confirms scan request, MLME-ASSOCIATE.confirm

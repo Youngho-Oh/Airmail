@@ -281,7 +281,7 @@ zb_uint16_t zb_address_short_by_ieee(zb_ieee_addr_t ieee_address) ZB_CALLBACK;
 
    @return RET_OK or RET_NOT_FOUND
  */
-zb_ret_t zb_address_ieee_by_short(zb_uint16_t short_addr, zb_ieee_addr_t ieee_address) ZB_CALLBACK;
+zb_ret_t zb_address_ieee_by_short(zb_uint16_t short_addr, zb_ieee_addr_t ieee_address);
 
 
 

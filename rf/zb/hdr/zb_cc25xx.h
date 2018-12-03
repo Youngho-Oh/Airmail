@@ -117,8 +117,8 @@ void zb_uz_short_reg_write_2b(zb_uint8_t reg, zb_uint16_t v);
 #define ZB_TRANS_CHECK_CHANNEL_ERROR() (ZB_IS_TX_CHANNEL_BUSY() || ZB_IS_TX_RETRY_COUNT_EXCEEDED())
 #define ZB_TRANS_CHECK_TX_RETRY_COUNT_EXCEEDED_ERROR() ZB_IS_TX_RETRY_COUNT_EXCEEDED() /* not 0 means cca fail error */
 
-#define ZB_UPDATE_SHORT_ADDR() SHORT_ADDR0 =  MAC_PIB().mac_short_address & 0xFF; SHORT_ADDR1 = (MAC_PIB().mac_short_address >>8)&0xFF
-#define ZB_CLEAR_SHORT_ADDR() (SHORT_ADDR0 = 0xFF, SHORT_ADDR1 = 0xFF)
+#define ZB_UPDATE_SHORT_ADDR() SHORTADDRH =  MAC_PIB().mac_short_address & 0xFF; SHORTADDRL = (MAC_PIB().mac_short_address >>8)&0xFF
+#define ZB_CLEAR_SHORT_ADDR() (SHORTADDRH = 0xFF, SHORTADDRL = 0xFF)
 #define ZB_UBEC_GET_RX_DATA_STATUS() (TRANS_CTX().int_status_0 & 0x40)
 #define ZB_UBEC_GET_TX_DATA_STATUS() (TRANS_CTX().int_status_1 & 0x02)
 
@@ -148,7 +148,7 @@ void zb_set_pan_id (zb_uint16_t pan_id);
   zb_transceiver_send_fifo_packet((header_length), ZB_NORMAL_TX_FIFO, (buf), 1)
 
 zb_ret_t zb_transceiver_send_fifo_packet(zb_uint8_t header_length, zb_uint16_t fifo_addr,
-                                         zb_buf_t *buf, zb_uint8_t need_tx) ZB_SDCC_REENTRANT;
+                                         zb_buf_t *buf, zb_uint8_t need_tx);
 
 #endif /* ZB_SNIFFER */
 
@@ -171,7 +171,7 @@ void zb_transceiver_set_channel(zb_uint8_t channel_number);
 #define ZB_TRANSCEIVER_SET_CHANNEL(channel_number) zb_transceiver_set_channel(channel_number)
 
 #ifndef ZB_SNIFFER
-void zb_uz2400_fifo_write(zb_uint16_t long_addr, zb_buf_t *buf) ZB_SDCC_REENTRANT;
+void zb_uz2400_fifo_write(zb_uint16_t long_addr, zb_buf_t *buf);
 #endif
 
 typedef struct zb_ubec_fifo_header_s
