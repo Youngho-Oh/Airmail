@@ -2054,22 +2054,22 @@ zb_mlme_set_confirm_t;
 /**
    MLME-GET.request primitive
  */
-void zb_mlme_get_request(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_get_request(zb_uint8_t param);
 
 /**
    MLME-GET.confirm primitive
  */
-void zb_mlme_get_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_get_confirm(zb_uint8_t param);
 
 /**
    MLME-SET.request primitive
  */
-void zb_mlme_set_request(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_set_request(zb_uint8_t param);
 
 /**
    MLME-SET.confirm primitive
  */
-void zb_mlme_set_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_set_confirm(zb_uint8_t param);
 
 
 /*! @} */
@@ -2252,7 +2252,7 @@ void zb_mac_init();
   MCPS-DATA.request. Accepts data request
   @param param - reference to buffer, contains upper layer data to send.
 */
-void zb_mcps_data_request(zb_uint8_t param) ZB_CALLBACK;
+void zb_mcps_data_request(zb_uint8_t param);
 
 
 /**
@@ -2313,33 +2313,33 @@ void zb_mlme_reset_request (zb_uint8_t param);
 
    @param param - packet buffer. Only its header.status is used.
  */
-void zb_mlme_reset_confirm (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_reset_confirm (zb_uint8_t param);
 
 /**
    Handles scan request.
    @param - reference to buffer, contains zb_mlme_scan_params_t
    parameters for scan.
  */
-void zb_mlme_scan_request (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_scan_request (zb_uint8_t param);
 
 /**
    Handles start request.
    @param - reference to buffer, contains zb_mlme_start_req_t
    parameters for start.
  */
-void zb_mlme_start_request (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_start_request (zb_uint8_t param);
 
 /**
    Confirms scan procedure.
    @param - reference to buffer.
  */
-void zb_mlme_scan_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_scan_confirm(zb_uint8_t param);
 
 /**
    Confirms start procedure.
    @param - reference to buffer.
  */
-void zb_mlme_start_confirm (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_start_confirm (zb_uint8_t param);
 
 /**
    Performs ED scan.
@@ -2352,20 +2352,20 @@ zb_ret_t zb_mlme_ed_scan();
    Performs active scan.
    @return Returns RET_OK on success and RET_ERROR on error.
  */
-zb_ret_t zb_mlme_active_scan() ZB_SDCC_REENTRANT;
+zb_ret_t zb_mlme_active_scan();
 
 
 /**
    Performs orphan scan.
    @return Returns RET_OK on success and RET_ERROR on error.
  */
-zb_ret_t zb_mlme_orphan_scan() ZB_SDCC_REENTRANT;
+zb_ret_t zb_mlme_orphan_scan();
 
 /**
    performs processing of the MLME-Start.request.
    @return RET_OK, RET_BLOCKED, error code on error
  */
-zb_ret_t zb_mac_process_mlme_start() ZB_SDCC_BANKED;
+zb_ret_t zb_mac_process_mlme_start();
 
 /**
   Fill packed mac header
@@ -2381,13 +2381,13 @@ void zb_mac_fill_mhr(zb_uint8_t *ptr, zb_mac_mhr_t *mhr);
   @param - reference to buffer, contains zb_mlme_associate_params_t
   parameters.
  */
-void zb_mlme_associate_request (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_associate_request (zb_uint8_t param);
 
 /**
   associate responce - coordinator side. send response to device.
   @param - reference to buffer
  */
-void zb_mlme_associate_response (zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_associate_response (zb_uint8_t param);
 
 
 /**
@@ -2405,55 +2405,55 @@ void zb_mlme_beacon_notify_indication(zb_uint8_t param);
   Confirms scan request, MLME-ASSOCIATE.confirm
   @param param - reference to buffer
  */
-void zb_mlme_scan_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_scan_confirm(zb_uint8_t param);
 
 /**
   Function parses incoming MAC command and executes it
   @param param - reference to buffer
 */
-void zb_mlme_command_accept(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_command_accept(zb_uint8_t param);
 
 /**
   Function checks received ack.
   @param param - reference to buffer
 */
-void zb_mlme_ack_accept(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_ack_accept(zb_uint8_t param);
 
 /**
   Function is called on acknowledge timeout
   @param param is unused
  */
-void zb_mac_ack_timeout(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_ack_timeout(zb_uint8_t param);
 
 /**
   Function is called on response timeout
   @param param is unused
  */
-void zb_mac_resp_timeout(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_resp_timeout(zb_uint8_t param);
 
 /**
   Function is called on scan timeout
   @param param is unused
  */
-void zb_mac_scan_timeout(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_scan_timeout(zb_uint8_t param);
 
 /**
   Function is called on transaction (pending data) timeout
   @param param is pending data index
  */
-void zb_mac_pending_data_timeout(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_pending_data_timeout(zb_uint8_t param);
 
 /**
   Function is called on getting indirect data timeout
   @param param is unused
  */
-void zb_mac_indirect_data_timeout(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_indirect_data_timeout(zb_uint8_t param);
 
 /**
   Accept data request function
   @param param - reference to buffer.
  */
-void zb_accept_data_request_cmd(zb_uint8_t param) ZB_CALLBACK;
+void zb_accept_data_request_cmd(zb_uint8_t param);
 
 
 /**
@@ -2461,7 +2461,7 @@ void zb_accept_data_request_cmd(zb_uint8_t param) ZB_CALLBACK;
    signal to high level with associate.indication
    @param param - reference to buffer.
 */
-void zb_accept_ass_request_cmd(zb_uint8_t param) ZB_CALLBACK;
+void zb_accept_ass_request_cmd(zb_uint8_t param);
 
 /**
    Calculates length of mac header (MHR) inside MAC frame
@@ -2477,7 +2477,7 @@ zb_uint8_t zb_mac_calculate_mhr_length(zb_uint8_t src_addr_mode, zb_uint8_t dst_
    Handles scan request.
    @return RET_OK, RET_BLOCKED, error code on error
  */
-void  zb_handle_scan_request(zb_uint8_t param) ZB_CALLBACK;
+void  zb_handle_scan_request(zb_uint8_t param);
 
 /**
   Sends beacon request command, mac spec 7.3.7 Beacon request command
@@ -2503,8 +2503,8 @@ zb_uint8_t zb_parse_mhr(zb_mac_mhr_t *mhr, zb_uint8_t *ptr);
   sends association request command
   @return RET_OK, RET_ERROR
 */
-void zb_mlme_send_association_req_cmd(zb_uint8_t param) ZB_CALLBACK;
-void zb_mlme_send_association_req_continue(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_send_association_req_cmd(zb_uint8_t param);
+void zb_mlme_send_association_req_continue(zb_uint8_t param);
 /**
   handle mac association response: forms association response cmd
   and puts it to pending queue, coordinator side
@@ -2526,7 +2526,7 @@ void zb_mac_update_superframe_and_pib();
    zb_mlme_data_req_params_t type
    @return RET_OK, error code on error
 */
-zb_ret_t zb_mlme_send_data_req_cmd(zb_mlme_data_req_params_t *params) ZB_SDCC_REENTRANT;
+zb_ret_t zb_mlme_send_data_req_cmd(zb_mlme_data_req_params_t *params);
 
 /**
    Check command transmit status.
@@ -2552,14 +2552,14 @@ zb_ret_t zb_mac_send_ack(zb_uint8_t ack_dsn, zb_uint8_t data_pending);
   coordinator
 */
 
-zb_ret_t zb_mac_get_indirect_data(zb_mlme_data_req_params_t *data_req_cmd_params) ZB_CALLBACK;
+zb_ret_t zb_mac_get_indirect_data(zb_mlme_data_req_params_t *data_req_cmd_params);
 
 /**
   Puts data to pending queue. It is used for indirect
   transmission. Coordinator side
   @return RET_PENDING on success, RET_ERROR on error
  */
-zb_ret_t zb_mac_put_data_to_pending_queue(zb_mac_pending_data_t *pend_data) ZB_SDCC_BANKED;
+zb_ret_t zb_mac_put_data_to_pending_queue(zb_mac_pending_data_t *pend_data);
 
 /**
   Handles data request command, coordinator side. Finds pending data
@@ -2567,25 +2567,25 @@ zb_ret_t zb_mac_put_data_to_pending_queue(zb_mac_pending_data_t *pend_data) ZB_S
   command, 7.5.6.3 Extracting pending data from a coordinator.
   @return RET_OK, RET_ERROR, RET_BLOCKED
 */
-zb_ret_t zb_handle_data_request_cmd() ZB_SDCC_REENTRANT;
+zb_ret_t zb_handle_data_request_cmd();
 
 /**
    Handle mac data request, caller side
    @return RET_OK, RET_ERROR, RET_BLOCKED
  */
-void zb_handle_mcps_data_req(zb_uint8_t param) ZB_CALLBACK;
+void zb_handle_mcps_data_req(zb_uint8_t param);
 
 /**
    Handles data frame. Now it's a callback.
 
  */
-void zb_handle_data_frame(zb_uint8_t param) ZB_CALLBACK;
+void zb_handle_data_frame(zb_uint8_t param);
 
 /**
    Handles beacon request
    @return RET_OK, RET_ERROR
  */
-void zb_handle_beacon_req(zb_uint8_t param) ZB_CALLBACK;
+void zb_handle_beacon_req(zb_uint8_t param);
 
 /*
   Sends coordinator realignment command
@@ -2615,7 +2615,7 @@ void zb_mlme_orphan_response(zb_uint8_t param);
   @param buffer - is used to store parameters for indication in it
   @return - returns RET_OK
 */
-zb_ret_t zb_mac_send_comm_status(zb_buf_t *pending_buf, zb_uint8_t mac_status, zb_buf_t *buffer) ZB_SDCC_REENTRANT;
+zb_ret_t zb_mac_send_comm_status(zb_buf_t *pending_buf, zb_uint8_t mac_status, zb_buf_t *buffer);
 
 
 
@@ -2630,21 +2630,21 @@ typedef struct zb_mlme_poll_request_s
 }
 zb_mlme_poll_request_t;
 
-void zb_poll_request(zb_uint8_t param) ZB_CALLBACK;
+void zb_poll_request(zb_uint8_t param);
 
 
 /**
   Handle mac poll request
   @return RET_OK, RET_BLOCKED, error code on error
 */
-void zb_handle_poll_request(zb_uint8_t param) ZB_CALLBACK;
+void zb_handle_poll_request(zb_uint8_t param);
 
 /**
    Handles MLME-poll.confirm
 
    @param param - parameter (packet buffer), with poll status
  */
-void zb_mlme_poll_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_poll_confirm(zb_uint8_t param);
 
 /**
    Sync loss reasons
@@ -2677,7 +2677,7 @@ zb_mlme_sync_loss_ind_t;
 
    @param param - parameter (packet buffer), @see zb_mlme_sync_loss_ind_t is on its tail
  */
-void zb_mlme_sync_loss_indication(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_sync_loss_indication(zb_uint8_t param);
 
 zb_ret_t zb_mac_setup_for_associate(zb_uint8_t logical_channel, zb_uint16_t pan_id,
                                     zb_uint16_t short_addr, zb_ieee_addr_t long_addr);
@@ -2710,14 +2710,14 @@ typedef zb_mlme_purge_request_t zb_mlme_purge_confirm_t;
 
    @param param - parameter (packet buffer), @see zb_mlme_purge_request_t is on its tail
  */
-void zb_mlme_purge_request(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_purge_request(zb_uint8_t param);
 
 /**
    Handles MLME-purge.confirm
 
    @param param - parameter (packet buffer), with status and zb_mlme_purge_confirm_t
  */
-void zb_mlme_purge_confirm(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_purge_confirm(zb_uint8_t param);
 
 
 #endif
@@ -2763,22 +2763,22 @@ void zb_mac_main_loop();
 /*! \endcond */
 /* receiving packet, suggested to be scheduled in check_int_status*/
 /* switching to the next channel*/
-void zb_mlme_scan_step(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_scan_step(zb_uint8_t param);
 
-void zb_mac_recv_data(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_recv_data(zb_uint8_t param);
 
-void zb_mac_parse_recv_data(zb_uint8_t param) ZB_CALLBACK;
+void zb_mac_parse_recv_data(zb_uint8_t param);
 
-void zb_handle_data_request_cmd_continue(zb_uint8_t param) ZB_CALLBACK;
+void zb_handle_data_request_cmd_continue(zb_uint8_t param);
 
-void zb_mlme_handle_orphan_response_continue(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_handle_orphan_response_continue(zb_uint8_t param);
 
-void zb_mlme_handle_orphan_response(zb_uint8_t param) ZB_CALLBACK;
+void zb_mlme_handle_orphan_response(zb_uint8_t param);
 
-void zb_handle_mcps_data_req_continue(zb_uint8_t param) ZB_CALLBACK;
+void zb_handle_mcps_data_req_continue(zb_uint8_t param);
 
 /* used, when we need no callback called after tx finished */
-void zb_dummy_cb(zb_uint8_t param) ZB_CALLBACK;
+void zb_dummy_cb(zb_uint8_t param);
 
 /* supporting MLME_SET.request for 802.15.4 */
 #ifndef ZB_CONFIGURABLE_MAC_PIB

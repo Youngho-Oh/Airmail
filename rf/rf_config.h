@@ -196,7 +196,7 @@ typedef unsigned int  	process_event_t;
 #define SDCC
 #define ZB_CC25XX
 
-#define ZB_ED_ROLE
+//#define ZB_ED_ROLE
 #define ZB_COORDINATOR_ROLE
 //#define ZB_ROUTER_ROLE
 

@@ -1,6 +1,6 @@
 include $(PROJ_ROOT)/includeEnv.mk
 
-SUB_DIRS = $(PROJ_ROOT)/rf/zb/aps $(PROJ_ROOT)/rf/zb/common $(PROJ_ROOT)/rf/zb/mac $(PROJ_ROOT)/rf/zb/nwk $(PROJ_ROOT)/rf/zb/nwk_main $(PROJ_ROOT)/rf/zb/osif $(PROJ_ROOT)/rf/zb/zdo 
+SUB_DIRS = $(PROJ_ROOT)/rf/zb/aps $(PROJ_ROOT)/rf/zb/common $(PROJ_ROOT)/rf/zb/mac $(PROJ_ROOT)/rf/zb/nwk $(PROJ_ROOT)/rf/zb/osif $(PROJ_ROOT)/rf/zb/zdo 
 
 TARGET =
 TARGET_SRCS = zb_init.c

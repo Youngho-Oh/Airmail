@@ -103,7 +103,7 @@ In Linux it means either mutex lock or nothing (depending on i/o implementation)
 
    @return none.
  */
-typedef void (ZB_CODE * zb_callback_t)(zb_uint8_t param) ZB_CALLBACK;
+typedef void (ZB_CODE * zb_callback_t)(zb_uint8_t param);
 
 
 
@@ -192,7 +192,7 @@ void zb_sched_init();
 
    @return none
  */
-void zb_sched_loop_iteration() ZB_SDCC_REENTRANT;
+void zb_sched_loop_iteration();
 
 /**
    Schedule callback execution.
@@ -204,10 +204,10 @@ void zb_sched_loop_iteration() ZB_SDCC_REENTRANT;
    @return RET_OK or error code.
  */
 
-zb_ret_t zb_schedule_callback(zb_callback_t func, zb_uint8_t param) ZB_SDCC_REENTRANT;
+zb_ret_t zb_schedule_callback(zb_callback_t func, zb_uint8_t param);
 
 /** Just the similar to schedule callback function, but used for mac cb queue */
-zb_ret_t zb_schedule_mac_cb(zb_callback_t func, zb_uint8_t param) ZB_SDCC_REENTRANT;
+zb_ret_t zb_schedule_mac_cb(zb_callback_t func, zb_uint8_t param);
 
 #define ZB_SCHEDULE_CALLBACK zb_schedule_callback
 
@@ -235,7 +235,7 @@ it will be called after current tx finished or just during next scheduler loop *
    @param timeout_bi - timeout, in beacon intervals
    @return RET_OK or error code
  */
-zb_ret_t zb_schedule_alarm(zb_callback_t func, zb_uint8_t param, zb_time_t timeout_bi) ZB_SDCC_REENTRANT;
+zb_ret_t zb_schedule_alarm(zb_callback_t func, zb_uint8_t param, zb_time_t timeout_bi);
 
 #define ZB_SCHEDULE_ALARM zb_schedule_alarm
 
@@ -264,7 +264,7 @@ zb_ret_t zb_schedule_alarm(zb_callback_t func, zb_uint8_t param, zb_time_t timeo
    @param param - parameter to cancel. \see ZB_ALARM_ANY_PARAM. \see ZB_ALARM_ALL_CB
    @return RET_OK or error code
  */
-zb_ret_t zb_schedule_alarm_cancel(zb_callback_t func, zb_uint8_t param) ZB_SDCC_REENTRANT;
+zb_ret_t zb_schedule_alarm_cancel(zb_callback_t func, zb_uint8_t param);
 
 /**
    Return true if scheduler has any pending callbacks
@@ -321,7 +321,7 @@ while(0)
 
 /* Schedules a callback, that requires NORMAL_FIFO for transfer or security operations,
 it will be called after current tx finished or just during next scheduler loop */
-zb_ret_t zb_schedule_tx_cb(zb_callback_t func, zb_uint8_t param) ZB_SDCC_REENTRANT;
+zb_ret_t zb_schedule_tx_cb(zb_callback_t func, zb_uint8_t param);
 
 /**
    Flag to run mac main loop

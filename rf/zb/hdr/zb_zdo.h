@@ -1946,7 +1946,7 @@ void zb_zdo_mgmt_permit_joining_req(zb_uint8_t param, zb_callback_t cb);
 /*! \endcond */
 
 
-void zb_zdo_mgmt_nwk_update_req(zb_uint8_t param, zb_callback_t cb);
+//void zb_zdo_mgmt_nwk_update_req(zb_uint8_t param, zb_callback_t cb);
 
 #ifndef ZB_LITTLE_ENDIAN
 #define ZB_LETOH16_XOR(val) \

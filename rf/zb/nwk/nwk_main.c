@@ -53,6 +53,7 @@ PURPOSE: Network layer main module
 #include "rf/zb/hdr/zb_nwk.h"
 #include "rf/zb/hdr/zb_aps.h"
 #include "rf/zb/nwk/nwk_internal.h"
+#include "rf/zb/hdr/zb_nwk_neighbor.h"
 #include "rf/zb/hdr/zb_secur.h"
 
 
@@ -1728,4 +1729,21 @@ zb_void_t zb_nwk_set_device_type(zb_nwk_device_type_t device_type)
   }
 }
 
+zb_ushort_t zb_nwk_hdr_size(zb_uint8_t *fctl)
+{
+#ifdef ZB_SECURITY
+  return (
+    ZB_NWK_SHORT_HDR_SIZE(ZB_NWK_FRAMECTL_GET_MULTICAST_FLAG(fctl)) +
+    (ZB_NWK_FRAMECTL_GET_SECURITY(fctl) ? sizeof(zb_nwk_aux_frame_hdr_t) : 0) +
+    (ZB_NWK_FRAMECTL_GET_DESTINATION_IEEE(fctl) + ZB_NWK_FRAMECTL_GET_SOURCE_IEEE(fctl)) * sizeof(zb_ieee_addr_t) +
+  0                             /* TODO: add source route subframe here */ \
+    );
+#else
+  return (
+    ZB_NWK_SHORT_HDR_SIZE(ZB_NWK_FRAMECTL_GET_MULTICAST_FLAG(fctl)) +
+    (ZB_NWK_FRAMECTL_GET_DESTINATION_IEEE(fctl) + ZB_NWK_FRAMECTL_GET_SOURCE_IEEE(fctl)) * sizeof(zb_ieee_addr_t) +
+  0                             /* TODO: add source route subframe here */
+    );
+#endif
+}
 /*! @} */
