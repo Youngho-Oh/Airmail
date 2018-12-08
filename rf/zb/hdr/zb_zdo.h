@@ -49,6 +49,9 @@ PURPOSE: ZDO API
 #ifndef ZB_ZDO_H
 #define ZB_ZDO_H 1
 
+#include "rf/zb/hdr/zb_config.h"
+#include "rf/zb/hdr/zb_nwk_neighbor.h"
+#include "rf/zb/hdr/zb_bufpool.h"
 #include "rf/zb/hdr/zb_af_globals.h"
 
 /*! \cond internals_doc */

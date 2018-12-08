@@ -57,6 +57,8 @@ PURPOSE: 8051-specific platform depenednt stuff
 #include <string.h>
 
 #include "rf/zb/hdr/zb_config.h"
+#include "rf/zb/hdr/zb_types.h"
+#include "rf/zb/hdr/zb_errors.h"
 
 #define ZB_VOLATILE volatile
 
@@ -406,8 +408,7 @@ typedef zb_uint8_t zb_power_desc_t[2];
 typedef zb_uint8_t zb_simple_desc_t[12];
 */
 
-zb_ret_t zb_write_nvram_config(zb_uint8_t aps_designated_coord, zb_uint8_t aps_use_insecure_join, zb_uint8_t aps_use_extended_pan_id,
-    zb_ieee_addr_t mac_extended_address);
+zb_ret_t zb_write_nvram_config(zb_uint8_t aps_designated_coord, zb_uint8_t aps_use_insecure_join, zb_uint8_t aps_use_extended_pan_id, zb_ieee_addr_t mac_extended_address);
 
 zb_ret_t zb_config_from_nvram();
 

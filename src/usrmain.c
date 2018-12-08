@@ -33,8 +33,8 @@ void sys_usrmain( )
 
 	// Initialize RF task
 	{
-//		task_rf_init( );
-//		wow_sche_task_evt_enable(PRIORITY_TASK_RF, EVENT_RF_INIT);
+		task_rf_init( );
+		wow_sche_task_evt_enable(PRIORITY_TASK_RF, EVENT_RF_INIT);
 	}
 
 	// Initialize IEEE 802.15.4 stack Task

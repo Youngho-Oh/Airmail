@@ -11,6 +11,7 @@
 #include "rf/basic_rf.h"
 #include "rf/hal_rf_util.h"
 #include "rf/hal_rf.h"
+#include "rf/zb/hdr/zb_zdo.h"
 
 #include "task_rf.h"
 
@@ -95,9 +96,9 @@ T_ERROR _task_rf_event_init(void)
 			log_message("Success to init RF\r\n",20);
 			sys_setting.enable_rf = 1;
 			//TODO
-		    _rf_init_power();
-		    halSetRxNormalMode();
-		    basicRfReceiveOn();
+//		    _rf_init_power();
+//		    halSetRxNormalMode();
+//		    basicRfReceiveOn();
 
 			wow_sche_task_evt_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND);
 		}
@@ -116,10 +117,10 @@ static T_ERROR _task_rf_event_law_send(uint8_t * sendbuf, uint16_t buf_size)
 {
 	log_message("RF law data send\r\n",18);
 
-	if( (sendbuf == NULL) || (buf_size == 0) )
-		return OS_PARAM_ERROR;
+//	if( (sendbuf == NULL) || (buf_size == 0) )
+//		return OS_PARAM_ERROR;
 
-    basicRfSendPacket(g_deviceAddr, (uint8_t *)sendbuf, buf_size + 1);
+//    basicRfSendPacket(g_deviceAddr, (uint8_t *)sendbuf, buf_size + 1);
 
 	wow_sche_task_evt_timer_enable(wow_sche_task_now_running(), EVENT_RF_LAW_SEND, 5000);
 
@@ -169,4 +170,11 @@ void _rf_init_power(void)
     halRfSetGain(HAL_RF_GAIN_HIGH);
 //    halRfSetGain(HAL_RF_GAIN_LOW);
 #endif
+}
+
+void zb_zdo_startup_complete(zb_uint8_t param)
+{
+	//TODO
+
+	return;
 }

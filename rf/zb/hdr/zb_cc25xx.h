@@ -48,6 +48,8 @@ PURPOSE: Common include file for ZigBee
 
 #include "rf/zb/hdr/zb_config.h"
 
+#include "rf/zb/hdr/zb_bufpool.h"
+
 #ifdef ZB_CC25XX
 #ifndef TI_SPECIFIC_INCLUDED
 #define TI_SPECIFIC_INCLUDED

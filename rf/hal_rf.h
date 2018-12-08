@@ -16,6 +16,8 @@
 #include "hal/common.h"
 #include "rf/rf_config.h"
 
+#include "rf/zb/hdr/zb_cc25xx.h"
+
 
 /***********************************************************************************
 * TYPEDEFS
@@ -79,12 +81,12 @@
 #define IRQ_RXPKTDONE              0x40
 
 // Selected strobes
-#define ISRXON()                st(RFST = 0xE3;)
-#define ISTXON()                st(RFST = 0xE9;)
-#define ISTXONCCA()             st(RFST = 0xEA;)
-#define ISRFOFF()               st(RFST = 0xEF;)
-#define ISFLUSHRX()             st(RFST = 0xEC;)
-#define ISFLUSHTX()             st(RFST = 0xEE;)
+//#define ISRXON()                st(RFST = 0xE3;)
+//#define ISTXON()                st(RFST = 0xE9;)
+//#define ISTXONCCA()             st(RFST = 0xEA;)
+//#define ISRFOFF()               st(RFST = 0xEF;)
+//#define ISFLUSHRX()             st(RFST = 0xEC;)
+//#define ISFLUSHTX()             st(RFST = 0xEE;)
 
 // CC2590-CC2591 support
 #if INCLUDE_PA==2591 || INCLUDE_PA==2592

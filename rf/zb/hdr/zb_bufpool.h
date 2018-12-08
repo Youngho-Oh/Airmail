@@ -52,7 +52,7 @@ PURPOSE: Packet buffers pool
 #include "rf/zb/hdr/zb_config.h"
 
 #include "rf/zb/hdr/zb_osif_8051.h"
-#include "rf/zb/hdr/zb_types.h"
+#include "rf/zb/hdr/zb_scheduler.h"
 
 /*! \addtogroup buf */
 /*! @{ */

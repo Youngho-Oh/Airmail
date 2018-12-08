@@ -49,6 +49,7 @@ PURPOSE: Zigbee scheduler: cooperative multitasking.
 #ifndef ZB_SCHEDULER_H
 #define ZB_SCHEDULER_H 1
 
+#include "rf/zb/hdr/zb_config.h"
 #include "rf/zb/hdr/zb_osif.h"
 #include "rf/zb/hdr/zb_list_macros.h"
 

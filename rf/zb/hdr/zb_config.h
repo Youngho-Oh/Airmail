@@ -53,6 +53,10 @@ constants etc.
 #include "rf/rf_config.h"
 #include <cc2530.h>
 
+#include "rf/zb/hdr/zb_types.h"
+#include "rf/zb/hdr/zb_errors.h"
+
+
 /*! \addtogroup ZB_CONFIG */
 /*! @{ */
 
