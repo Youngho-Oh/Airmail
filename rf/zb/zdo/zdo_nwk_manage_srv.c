@@ -56,7 +56,7 @@ PURPOSE: ZDO network management functions, client side
 #include "rf/zb/zdo/zdo_common.h"
 #include "rf/zb/hdr/zb_secur.h"
 
-//#include "zb_bank_8.h"
+#include "hdr/bank_7.h"
 
 #ifndef ZB_LIMITED_FEATURES
 /*! \addtogroup ZB_ZDO */

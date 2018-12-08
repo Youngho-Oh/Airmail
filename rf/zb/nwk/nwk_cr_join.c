@@ -59,7 +59,7 @@ PURPOSE: Network creation routine
 /*! \addtogroup ZB_NWK */
 /*! @{ */
 
-//#include "zb_bank_6.h"
+#include "hdr/bank_4.h"
 
 
 #ifdef ZB_ROUTER_ROLE

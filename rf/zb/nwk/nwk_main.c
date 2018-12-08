@@ -60,7 +60,7 @@ PURPOSE: Network layer main module
 /*! \addtogroup ZB_NWK */
 /*! @{ */
 
-//#include "zb_bank_3.h"
+#include "hdr/bank_6.h"
 
 /**
    NIB database in memory

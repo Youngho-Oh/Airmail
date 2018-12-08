@@ -55,7 +55,7 @@ PURPOSE: AF: RX path.
 #include "rf/zb/zdo/zdo_common.h"
 #include "rf/zb/hdr/zb_test_profile.h"
 
-//#include "zb_bank_7.h"
+#include "hdr/bank_5.h"
 /*! \addtogroup ZB_AF */
 /*! @{ */
 

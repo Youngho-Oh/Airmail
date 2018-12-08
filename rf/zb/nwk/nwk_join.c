@@ -59,7 +59,7 @@ PURPOSE: Network creation routine
 /*! \addtogroup ZB_NWK */
 /*! @{ */
 
-//#include "zb_bank_4.h"
+#include "hdr/bank_4.h"
 
 static void nwk_join_failure_confirm(zb_uint8_t param, zb_uint8_t s)
 {

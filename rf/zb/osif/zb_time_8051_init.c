@@ -63,8 +63,10 @@ void zb_8051_init_timer()
   // clear interrupt pending flag, disable interrupt
   T1STAT &= ~0x01;  // T1STAT.CH1IF = 0
   IEN1   &= ~0x02;  // IEN1.T1EN = 0
+#ifndef ZB_SYSCLK_DISABLE
   init_clock(); /* transceiver needs clock for carrying frequency modulation */
   clock_set_src();
+#endif
   IEN1 |=  0x02; // IEN1.T1EN = 1
 }
                         

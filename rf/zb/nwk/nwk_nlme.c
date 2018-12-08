@@ -59,7 +59,7 @@ PURPOSE: Network layer main module
 /*! \addtogroup ZB_NWK */
 /*! @{ */
 
-//#include "zb_bank_6.h"
+#include "hdr/bank_5.h"
 
 
 #ifndef ZB_LIMITED_FEATURES

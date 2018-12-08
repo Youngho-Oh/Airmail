@@ -56,7 +56,7 @@ PURPOSE: Zigbee packet buffers pool
 /*! \addtogroup buf */
 /*! @{ */
 
-//#include "zb_bank_common.h"
+#include "hdr/bank_2.h"
 
 #define ZB_BUFS_LIMIT (ZB_IOBUF_POOL_SIZE / 2)
 

@@ -56,7 +56,7 @@ PURPOSE: ZDO common functions, both client and server side
 #include "rf/zb/zdo/zdo_common.h"
 
 
-//#include "zb_bank_8.h"
+#include "hdr/bank_7.h"
 /*! \addtogroup ZB_ZDO */
 /*! @{ */
 

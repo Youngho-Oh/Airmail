@@ -52,7 +52,7 @@ PURPOSE: Roitines specific to mlme scan
 #include "rf/zb/hdr/zb_mac.h"
 #include "rf/zb/mac/mac_internal.h"
 
-//#include "zb_bank_2.h"
+#include "hdr/bank_3.h"
 
 /*! \addtogroup ZB_MAC */
 /*! @{ */

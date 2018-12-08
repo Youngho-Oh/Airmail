@@ -7,7 +7,7 @@ PACKIHX = $(SDCC_CMD_ROOT_PATH)/packihx
 #CFLAGS = --model-huge --stack-auto --xstack --std-c99 --debug
 CFLAGS = --model-huge --stack-auto --xstack --std-c99 --debug
 #LDFLAGS = --code-loc 0x0000 --xram-loc 0x0000 --xram-size 0x2000 --stack-size 16
-LDFLAGS = --code-loc 0x0000 --xram-loc 0x0000 --xram-size 0x2000 --stack-size 16 -Wl-r -Wl-bBANK1=0x018000 -Wl-bBANK2=0x028000
+LDFLAGS = --code-loc 0x0000 --xram-loc 0x0000 --xram-size 0x2000 --stack-size 16 -Wl-r -Wl-bBANK1=0x018000 -Wl-bBANK2=0x028000 -Wl-bBANK3=0x038000 -Wl-bBANK4=0x048000 -Wl-bBANK5=0x058000 -Wl-bBANK6=0x068000 -Wl-bBANK7=0x078000
 #LDFLAGS = --code-loc 0x0000 --xram-loc 0x0000 --xram-size 0x2000 --stack-size 16 -Wl-r -Wl-bBANK1=0x018000
 MV = mv
 RM = rm -f

@@ -53,6 +53,8 @@ PURPOSE: Network tree routing
 #include "rf/zb/hdr/zb_aps.h"
 #include "rf/zb/nwk/nwk_internal.h"
 
+#include "hdr/bank_4.h"
+
 #if defined ZB_NWK_MESH_ROUTING && defined ZB_ROUTER_ROLE
 //#if 1
 

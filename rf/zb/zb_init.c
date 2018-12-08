@@ -81,10 +81,10 @@ void zb_init()
   ZVUNUSED(rx_pipe);
   ZVUNUSED(tx_pipe);
 #endif
-  ZB_MEMSET(&g_zb, 0, sizeof(zb_globals_t));
-  ZB_MEMSET((void*)&g_izb, 0, sizeof(zb_intr_globals_t));
+//  ZB_MEMSET(&g_zb, 0, sizeof(zb_globals_t));
+//  ZB_MEMSET((void*)&g_izb, 0, sizeof(zb_intr_globals_t));
   /* some init of 8051 HW moved to zb_low_level_init() */
-  ZB_START_DEVICE();
+//  ZB_START_DEVICE();
 #ifdef ZB_INIT_HAS_ARGS
   TRACE_INIT(trace_comment);
 
@@ -93,16 +93,16 @@ void zb_init()
   /* set defaults, then update it from nvram */
   zb_ib_set_defaults(rx_pipe);
 #else
-  TRACE_INIT("");
+//  TRACE_INIT("");
   /* special trick for ns build run on 8051 simulator: get node number from the
    * rx pipe name  */
   /* set defaults, then update it from nvram */
-  zb_ib_set_defaults((char*)"");
+//  zb_ib_set_defaults((char*)"");
 #endif
-  zb_ib_load();
-
-  zb_sched_init();
-  zb_init_buffers();
+//  zb_ib_load();
+//
+//  zb_sched_init();
+//  zb_init_buffers();
 
 #ifndef ZB8051
 #ifdef ZB_TRANSPORT_LINUX_SPIDEV
@@ -114,9 +114,9 @@ void zb_init()
   zb_mac_transport_init();
 #endif
 
-  zb_mac_init();
-
-  zb_nwk_init();
+//  zb_mac_init();
+//
+//  zb_nwk_init();
 
 
 #if defined ZB_NVRAM_WRITE_CFG && defined ZB_USE_NVRAM && defined C8051F120
@@ -140,8 +140,8 @@ void zb_init()
   zb_read_formdesc_data();*/
 #endif
 
-  zb_aps_init();
-  zb_zdo_init();
+//  zb_aps_init();
+//  zb_zdo_init();
 }
 
 

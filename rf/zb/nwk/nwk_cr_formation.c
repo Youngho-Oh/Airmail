@@ -57,7 +57,7 @@ PURPOSE: Network creation routine
 /*! \addtogroup ZB_NWK */
 /*! @{ */
 
-//#include "zb_bank_5.h"
+#include "hdr/bank_3.h"
 
 #ifdef ZB_ROUTER_ROLE
 static void call_mlme_start(zb_buf_t *buf, zb_uint16_t pan_id, zb_uint16_t channel);

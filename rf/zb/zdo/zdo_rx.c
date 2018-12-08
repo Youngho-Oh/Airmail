@@ -55,7 +55,7 @@ PURPOSE: ZDO RX path
 #include "rf/zb/hdr/zb_zdo.h"
 #include "rf/zb/zdo/zdo_common.h"
 
-//#include "zb_bank_8.h"
+#include "hdr/bank_7.h"
 /*! \addtogroup ZB_ZDO */
 /*! @{ */
 

@@ -55,7 +55,7 @@ PURPOSE: Roitines specific mac data transfer
 #include "rf/zb/hdr/zb_secur.h"
 #include "rf/zb/hdr/zb_zdo.h"
 
-//#include "zb_bank_1.h"
+#include "hdr/bank_3.h"
 
 
 /*! \addtogroup ZB_MAC */

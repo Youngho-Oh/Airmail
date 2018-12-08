@@ -56,7 +56,7 @@ PURPOSE: PAIND conflict detection and resolution at runtime
 #include "rf/zb/hdr/zb_secur.h"
 
 
-//#include "zb_bank_6.h"
+#include "hdr/bank_5.h"
 
 /*! \addtogroup ZB_NWK */
 /*! @{ */

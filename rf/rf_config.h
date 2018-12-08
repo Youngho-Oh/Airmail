@@ -200,5 +200,6 @@ typedef unsigned int  	process_event_t;
 #define ZB_COORDINATOR_ROLE
 //#define ZB_ROUTER_ROLE
 
+#define ZB_SYSCLK_DISABLE
 
 #endif /* RF_RF_CONFIG_H_ */

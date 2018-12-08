@@ -58,7 +58,7 @@ PURPOSE: Roitines specific to coordinator role
 /*! \addtogroup ZB_MAC */
 /*! @{ */
 
-//#include "zb_bank_2.h"
+#include "hdr/bank_3.h"
 
 #ifdef ZB_ROUTER_ROLE
 

@@ -61,6 +61,8 @@ PURPOSE: ubec uz2400 specific
 #include "rf/zb/hdr/zb_secur.h"
 #endif /* ZB_SNIFFER */
 
+#include "hdr/bank_3.h"
+
 void init_clock()
 {
     if (CLOCK_SOURCE == CLOCK_XTAL)
@@ -275,7 +277,7 @@ void zb_transceiver_get_rssi(zb_uint8_t *rssi_value)
 }
 
 zb_ret_t zb_transceiver_send_fifo_packet(zb_uint8_t header_length, zb_uint16_t fifo_addr,
-                                         zb_buf_t *buf, zb_uint8_t need_tx) ZB_SDCC_REENTRANT
+                                         zb_buf_t *buf, zb_uint8_t need_tx)
 {
   zb_uint8_t *fc = ZB_BUF_BEGIN(buf);
 
@@ -336,7 +338,7 @@ zb_ret_t zb_transceiver_send_fifo_packet(zb_uint8_t header_length, zb_uint16_t f
   return RET_OK;
 }
 
-void zb_uz2400_fifo_write(zb_uint16_t long_addr, zb_buf_t *buf) ZB_SDCC_REENTRANT
+void zb_uz2400_fifo_write(zb_uint16_t long_addr, zb_buf_t *buf)
 {
   TRACE_MSG(TRACE_MAC2, ">> zb_uz2400_fifo_write", (FMT__0));
   ZVUNUSED(long_addr);

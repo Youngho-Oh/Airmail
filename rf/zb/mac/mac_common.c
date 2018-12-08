@@ -56,6 +56,7 @@ PURPOSE: MAC functions to be put into common bank
 #include "rf/zb/hdr/zb_ubec24xx.h"
 #include "rf/zb/hdr/zb_mac_globals.h"
 
+#include "hdr/bank_2.h"
 
 /*! \addtogroup ZB_MAC */
 /*! @{ */

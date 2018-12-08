@@ -62,7 +62,7 @@ PURPOSE:
 /*! @{ */
 
 /* Both MAC and NWK placed to the bank1, so all MAC calls are not banked */
-//#include "zb_bank_1.h"
+#include "hdr/bank_3.h"
 
 
 static zb_bool_t check_frame_dst_addr(zb_mac_mhr_t *mhr);
@@ -625,7 +625,7 @@ void zb_mac_fill_mhr(zb_uint8_t *ptr, zb_mac_mhr_t *mhr)
 /*
   Function parses incoming MAC command and executes it
 */
-void zb_mlme_command_accept(zb_uint8_t param) ZB_CALLBACK
+void zb_mlme_command_accept(zb_uint8_t param)
 {
   zb_buf_t *request = (zb_buf_t*)ZB_BUF_FROM_REF(param);
   zb_uint8_t *cmd_ptr;
@@ -798,7 +798,7 @@ void zb_mlme_command_accept(zb_uint8_t param) ZB_CALLBACK
 /*
   Function checks received ack.
 */
-void zb_mlme_ack_accept(zb_uint8_t param) ZB_CALLBACK
+void zb_mlme_ack_accept(zb_uint8_t param)
 {
   zb_buf_t *request = (zb_buf_t*)ZB_BUF_FROM_REF(param);
 #if defined(ZB_MANUAL_ACK) || defined(ZB_CC25XX)
@@ -929,14 +929,14 @@ zb_void_t zb_fcf_set_dst_addressing_mode(zb_uint8_t *p_fcf, zb_uint8_t addr_mode
 }
 
 
-void zb_mac_ack_timeout(zb_uint8_t param) ZB_CALLBACK
+void zb_mac_ack_timeout(zb_uint8_t param)
 {
   ZVUNUSED(param);
   TRACE_MSG(TRACE_MAC2, "mac_ack_tmo", (FMT__0));
   ZB_MAC_SET_ACK_TIMEOUT();
 }
 
-void zb_mac_resp_timeout(zb_uint8_t param) ZB_CALLBACK
+void zb_mac_resp_timeout(zb_uint8_t param)
 {
   zb_ret_t ret = RET_OK;
   zb_mlme_associate_params_t *params = NULL;
@@ -977,7 +977,7 @@ void zb_mac_scan_timeout(zb_uint8_t param) ZB_CALLBACK
 }
 
 
-void zb_mac_indirect_data_timeout(zb_uint8_t param) ZB_CALLBACK
+void zb_mac_indirect_data_timeout(zb_uint8_t param)
 {
   TRACE_MSG(TRACE_MAC2, "mac_indir_dt_tmo", (FMT__0));
 
@@ -1019,7 +1019,7 @@ zb_ret_t zb_check_cmd_tx_status()
 }
 
 /* returns true if frame is sent directly to current device */
-static zb_bool_t check_frame_dst_addr(zb_mac_mhr_t *mhr) ZB_SDCC_REENTRANT
+static zb_bool_t check_frame_dst_addr(zb_mac_mhr_t *mhr)
 {
   TRACE_MSG(TRACE_MAC3, "dst addr mode %i", (FMT__D, ZB_FCF_GET_DST_ADDRESSING_MODE(mhr->frame_control)));
   if (ZB_FCF_GET_DST_ADDRESSING_MODE(mhr->frame_control) == ZB_ADDR_16BIT_DEV_OR_BROADCAST)
@@ -1039,7 +1039,7 @@ static zb_bool_t check_frame_dst_addr(zb_mac_mhr_t *mhr) ZB_SDCC_REENTRANT
 }
 
 
-void zb_poll_request(zb_uint8_t param) ZB_CALLBACK
+void zb_poll_request(zb_uint8_t param)
 {
   if ( !param )
   {
@@ -1059,7 +1059,7 @@ void zb_poll_request(zb_uint8_t param) ZB_CALLBACK
   }
 }
 
-void zb_handle_poll_request(zb_uint8_t param) ZB_CALLBACK
+void zb_handle_poll_request(zb_uint8_t param)
 {
   zb_ret_t ret = RET_OK;
   zb_mlme_poll_request_t *request;
@@ -1120,7 +1120,7 @@ void zb_handle_poll_request(zb_uint8_t param) ZB_CALLBACK
 
 #ifndef ZB_LIMITED_FEATURES
 
-void zb_mlme_get_request(zb_uint8_t param) ZB_CALLBACK
+void zb_mlme_get_request(zb_uint8_t param)
 {
   zb_mac_status_t status = MAC_SUCCESS;
   zb_buf_t *buf = ZB_BUF_FROM_REF(param);
@@ -1284,7 +1284,7 @@ void zb_mlme_get_request(zb_uint8_t param) ZB_CALLBACK
 }
 
 /* FIXME: zb_mlme_get_confirm must be somewhere in the upper layer. */
-void zb_mlme_get_confirm(zb_uint8_t param) ZB_CALLBACK
+void zb_mlme_get_confirm(zb_uint8_t param)
 {
   zb_buf_t *buf = ZB_BUF_FROM_REF(param);
   zb_mlme_get_confirm_t *conf = NULL;
@@ -1307,7 +1307,7 @@ void zb_mlme_get_confirm(zb_uint8_t param) ZB_CALLBACK
   zb_free_buf(buf);
 }
 
-void zb_mlme_set_request(zb_uint8_t param) ZB_CALLBACK
+void zb_mlme_set_request(zb_uint8_t param)
 {
   zb_mac_status_t status = MAC_SUCCESS;
   zb_buf_t *buf = ZB_BUF_FROM_REF(param);

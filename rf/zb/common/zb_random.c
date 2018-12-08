@@ -47,7 +47,7 @@ PURPOSE: 8051-specific random number generator
 */
 
 #include "rf/zb/hdr/zb_common.h"
-//#include "zb_bank_common.h"
+#include "hdr/bank_1.h"
 
 #define RND_BASE ((zb_uint32_t)&g_izb)
 

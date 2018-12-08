@@ -56,7 +56,7 @@ Mandatory calls onnly. Other calls will be implemented in some other project sco
 #include "rf/zb/hdr/zb_zdo.h"
 #include "rf/zb/zdo/zdo_common.h"
 
-//#include "zb_bank_9.h"
+#include "hdr/bank_7.h"
 /*! \addtogroup ZB_ZDO */
 /*! @{ */
 

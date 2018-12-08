@@ -34,7 +34,8 @@ int main()
 		// Set up kernel clock
 		wow_clock_init();
 		// Set up zigbee stack.
-//		zb_init();
+		//XXX
+		zb_init();
 		// Set up task
 		wow_sche_task_init();
 		// start kernel clock

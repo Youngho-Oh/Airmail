@@ -52,7 +52,7 @@ PURPOSE: Zigbee scheduler.
 #include "rf/zb/hdr/zb_common.h"
 #include "rf/zb/hdr/zb_list_macros.h"
 
-//#include "zb_bank_common.h"
+#include "hdr/bank_2.h"
 
 /**
    \par Scheduler and timer management.

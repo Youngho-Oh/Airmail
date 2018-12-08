@@ -58,7 +58,7 @@ PURPOSE: Network discovery routine
 /*! \addtogroup ZB_NWK */
 /*! @{ */
 
-//#include "zb_bank_5.h"
+#include "hdr/bank_4.h"
 
 void zb_nlme_network_discovery_request(zb_uint8_t param)
 {
