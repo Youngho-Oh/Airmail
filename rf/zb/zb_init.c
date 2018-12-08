@@ -81,10 +81,10 @@ void zb_init()
   ZVUNUSED(rx_pipe);
   ZVUNUSED(tx_pipe);
 #endif
-//  ZB_MEMSET(&g_zb, 0, sizeof(zb_globals_t));
-//  ZB_MEMSET((void*)&g_izb, 0, sizeof(zb_intr_globals_t));
+  ZB_MEMSET(&g_zb, 0, sizeof(zb_globals_t));
+  ZB_MEMSET((void*)&g_izb, 0, sizeof(zb_intr_globals_t));
   /* some init of 8051 HW moved to zb_low_level_init() */
-//  ZB_START_DEVICE();
+  ZB_START_DEVICE();
 #ifdef ZB_INIT_HAS_ARGS
   TRACE_INIT(trace_comment);
 
