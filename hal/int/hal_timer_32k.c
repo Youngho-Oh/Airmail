@@ -10,8 +10,10 @@
 */
 #include "hal/int/hal_timer_32k.h"
 
-#include "../common.h"
+#include "hal/common.h"
 #include "hal/int/hal_int.h"
+
+#include "sys/log.h"
 
 /***********************************************************************************
 * LOCAL VARIABLES

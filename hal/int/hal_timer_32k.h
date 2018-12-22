@@ -64,6 +64,11 @@ void halTimer32kIntConnect(ISR_FUNC_PTR isr);
 void halTimer32kIntEnable(void);
 void halTimer32kIntDisable(void);
 
+#if (SYS_XSTACK_SUPPROT == 1)
+void timer1_isr(void) __interrupt(T1_VECTOR) __using(2);
+#else
+void timer1_isr(void) __interrupt(T1_VECTOR) __using(1);
+#endif
 
 #ifdef  __cplusplus
 }

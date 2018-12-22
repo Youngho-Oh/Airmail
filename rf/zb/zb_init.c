@@ -93,16 +93,16 @@ void zb_init()
   /* set defaults, then update it from nvram */
   zb_ib_set_defaults(rx_pipe);
 #else
-//  TRACE_INIT("");
+  TRACE_INIT("");
   /* special trick for ns build run on 8051 simulator: get node number from the
    * rx pipe name  */
   /* set defaults, then update it from nvram */
-//  zb_ib_set_defaults((char*)"");
+  zb_ib_set_defaults((char*)"");
 #endif
-//  zb_ib_load();
-//
-//  zb_sched_init();
-//  zb_init_buffers();
+  zb_ib_load();
+
+  zb_sched_init();
+  zb_init_buffers();
 
 #ifndef ZB8051
 #ifdef ZB_TRANSPORT_LINUX_SPIDEV
@@ -114,9 +114,9 @@ void zb_init()
   zb_mac_transport_init();
 #endif
 
-//  zb_mac_init();
-//
-//  zb_nwk_init();
+  zb_mac_init();
+
+  zb_nwk_init();
 
 
 #if defined ZB_NVRAM_WRITE_CFG && defined ZB_USE_NVRAM && defined C8051F120
@@ -140,8 +140,8 @@ void zb_init()
   zb_read_formdesc_data();*/
 #endif
 
-//  zb_aps_init();
-//  zb_zdo_init();
+  zb_aps_init();
+  zb_zdo_init();
 }
 
 

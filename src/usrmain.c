@@ -39,7 +39,6 @@ void sys_usrmain( )
 
 	// Initialize IEEE 802.15.4 stack Task
 	{
-		//zb_init()->zb_sched_init();
 		wow_sche_task_evt_enable(PRIORITY_TASK_RF_MAC, EVENT_RF_MAC_INIT);
 	}
 }
