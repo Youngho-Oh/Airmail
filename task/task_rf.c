@@ -70,7 +70,7 @@ T_ERROR task_rf_event_function(unsigned char cur_task_event)
 		break;
 	case EVENT_RF_LAW_SEND :
 		//TODO
-		memcpy(temp_data, "hello_world", 11);
+//		memcpy(temp_data, "hello_world", 11);
 		_task_rf_event_law_send(temp_data, 11);
 		break;
 	default :

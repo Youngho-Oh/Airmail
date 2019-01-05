@@ -420,9 +420,9 @@ uint8_t basicRfSendPacket(uint16_t destAddr, uint8_t* pPayload, uint8_t length)
     uint8_t status;
 
     // Turn on receiver if its not on
-//    if(!txState.receiveOn) {
-//        halRfReceiveOn();
-//    }
+    if(!txState.receiveOn) {
+        halRfReceiveOn();
+    }
 
     // Check packet length
     length = min(length, BASIC_RF_MAX_PAYLOAD_SIZE);
@@ -466,9 +466,9 @@ uint8_t basicRfSendPacket(uint16_t destAddr, uint8_t* pPayload, uint8_t length)
     }
 
     // Turn off the receiver if it should not continue to be enabled
-//    if (!txState.receiveOn) {
-//        halRfReceiveOff();
-//    }
+    if (!txState.receiveOn) {
+        halRfReceiveOff();
+    }
 
     if(status == SUCCESS) {
         txState.txSeqNumber++;
