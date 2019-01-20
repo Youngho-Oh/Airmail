@@ -35,7 +35,7 @@ int main()
 		// Set up kernel clock
 		wow_clock_init();
 		// Set up zigbee stack.
-		//XXX
+		// task_rf_mac is initialized in this function.
 		zb_init();
 		// Set up task
 		wow_sche_task_init();

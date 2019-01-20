@@ -65,18 +65,25 @@ static void call_mlme_start(zb_buf_t *buf, zb_uint16_t pan_id, zb_uint16_t chann
 
 #ifdef ZB_COORDINATOR_ROLE
 
+//XXX
+#include "sys/log.h"
+
 void zb_nlme_network_formation_request(zb_uint8_t param)
 {
+	log_message("11111\r\n", 7);
 
   TRACE_MSG(TRACE_NWK1, ">>nwk_formation_req %hd", (FMT__H, param));
 
   TRACE_MSG(TRACE_NWK1, "nwk state %hd joined %hd", (FMT__H_H, ZG->nwk.handle.state, ZG->nwk.handle.joined));
 
+  log_message("22222\r\n", 7);
   if (!(ZG->nwk.handle.state == ZB_NLME_STATE_IDLE
         && !ZG->nwk.handle.joined ))
   {
+	  log_message("33333\r\n", 7);
     TRACE_MSG(TRACE_NWK1, "nwk busy or joined", (FMT__0, ZG->nwk.handle.state));
     NWK_FORMATION_FAILURE_CONFIRM((zb_buf_t *)ZB_BUF_FROM_REF(param), ZB_NWK_STATUS_INVALID_REQUEST);
+    log_message("44444\r\n", 7);
   }
   else
   {
@@ -103,6 +110,7 @@ void zb_nlme_network_formation_request(zb_uint8_t param)
      */
 
     /* request was saved in our internal buffer in zb_nlme_network_formation_request() */
+	  log_message("55555\r\n", 7);
     zb_nlme_network_formation_request_t *request =
       ZB_GET_BUF_PARAM(ZB_BUF_FROM_REF(param), zb_nlme_network_formation_request_t);
 
@@ -123,10 +131,9 @@ void zb_nlme_network_formation_request(zb_uint8_t param)
     ZG->nwk.handle.state = MAGIC_IS_POWER_OF_TWO(ZG->nwk.handle.saved_req.formation.scan_channels) ?
       ZB_NLME_STATE_FORMATION_ACTIVE_SCAN : ZB_NLME_STATE_FORMATION_ED_SCAN;
     /* Call 1 or 2 scans, select channel, call mlme_start */
+    log_message("66666\r\n", 7);
   }
   TRACE_MSG(TRACE_NWK1, "<<nwk_formation_req", (FMT__0));
-
-
 }
 
 

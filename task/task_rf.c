@@ -172,10 +172,3 @@ void _rf_init_power(void)
 //    halRfSetGain(HAL_RF_GAIN_LOW);
 #endif
 }
-
-void zb_zdo_startup_complete(zb_uint8_t param)
-{
-	//TODO
-
-	return;
-}

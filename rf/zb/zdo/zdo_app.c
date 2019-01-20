@@ -151,7 +151,6 @@ zb_ret_t zdo_dev_start()
                                    For duration 1 ~0.05s
                                 */
       ret = ZB_SCHEDULE_CALLBACK(zb_nlme_network_formation_request, ZB_REF_FROM_BUF(buf));    
-
 #else
       TRACE_MSG(TRACE_MAC1, "Coordinator role is not supported", (FMT__0));
       ret = RET_NOT_IMPLEMENTED;

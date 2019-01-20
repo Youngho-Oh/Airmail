@@ -494,7 +494,7 @@ void zb_mac_parse_recv_data(zb_uint8_t param)
 
 
 #ifndef ZB_LIMITED_FEATURES
-void zb_mlme_reset_request(zb_uint8_t param) ZB_CALLBACK
+void zb_mlme_reset_request(zb_uint8_t param)
 {
   zb_buf_t *buf = (zb_buf_t *)ZB_BUF_FROM_REF(param);
   zb_mlme_reset_request_t *reset_req = NULL;

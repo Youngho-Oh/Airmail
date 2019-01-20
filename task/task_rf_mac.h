@@ -10,5 +10,6 @@
 
 // Defined RF task event
 #define EVENT_RF_MAC_INIT		0
+#define EVENT_RF_MAC_BEACON		1
 
 #endif /* TASK_TASK_RF_MAC_H_ */

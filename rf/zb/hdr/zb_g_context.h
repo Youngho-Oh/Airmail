@@ -83,9 +83,9 @@ struct zb_intr_globals_s;
 typedef ZB_VOLATILE struct zb_intr_globals_s zb_intr_globals_t;
 
 #ifndef ZB_SNIFFER
-extern ZB_SDCC_XDATA zb_globals_t g_zb;
+extern zb_globals_t g_zb;
 #endif
-extern ZB_SDCC_XDATA zb_intr_globals_t g_izb;
+extern zb_intr_globals_t g_izb;
 
 /**
    Macro to access globals
