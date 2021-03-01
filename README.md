@@ -15,7 +15,7 @@
 ## Getting stared
 
  - Development enviornment : WSL (case of using windows10)  
-    → [INSTALL GUIDE](http://wsl-guide.org/en/latest/installation.html)
+    → [INSTALL GUIDE](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
  - Compiler : SDCC (case of using CC2530)  
     → [DOWNLOAD LINK](https://sourceforge.net/projects/sdcc/files/)  
 
